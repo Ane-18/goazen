@@ -30,7 +30,8 @@ ios/Flutter/Flutter.podspec
 photos/
 *.jpg
 *.jpeg
-*.png
+# Only exclude user photos, not app resources
+/photos/*.png
 
 # IDE
 .idea/
