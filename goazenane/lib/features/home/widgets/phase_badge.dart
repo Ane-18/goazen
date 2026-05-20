@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 
@@ -16,9 +16,9 @@ class PhaseBadge extends StatelessWidget {
         vertical: compact ? 4 : 8,
       ),
       decoration: BoxDecoration(
-        color: config.$1.withOpacity(0.15),
+        color: config.$1.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: config.$1.withOpacity(0.4)),
+        border: Border.all(color: config.$1.withValues(alpha: 0.4)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -50,3 +50,4 @@ class PhaseBadge extends StatelessWidget {
     }
   }
 }
+

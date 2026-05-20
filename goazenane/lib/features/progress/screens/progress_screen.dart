@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:go_router/go_router.dart';
@@ -384,7 +384,7 @@ class _AchievementsGrid extends ConsumerWidget {
                         height: 48,
                         decoration: BoxDecoration(
                           color: unlocked
-                              ? AppColors.success.withOpacity(0.2)
+                              ? AppColors.success.withValues(alpha: 0.2)
                               : AppColors.surfaceVariant,
                           shape: BoxShape.circle,
                         ),
@@ -461,3 +461,4 @@ Widget _emptyCard(String title, String msg) => Container(
     ],
   ),
 );
+

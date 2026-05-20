@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -383,7 +383,7 @@ class _ExerciseHeader extends ConsumerWidget {
   Widget _chip(String label, Color color) => Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.15),
+          color: color.withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(6),
         ),
         child:
@@ -400,9 +400,9 @@ class _RestTimerWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.info.withOpacity(0.1),
+        color: AppColors.info.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.info.withOpacity(0.3)),
+        border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -547,12 +547,12 @@ class _SetRowState extends ConsumerState<_SetRow> {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
           color: completed
-              ? AppColors.success.withOpacity(0.1)
+              ? AppColors.success.withValues(alpha: 0.1)
               : AppColors.surface,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: completed
-                ? AppColors.success.withOpacity(0.4)
+                ? AppColors.success.withValues(alpha: 0.4)
                 : AppColors.surfaceElevated,
           ),
         ),
@@ -672,7 +672,7 @@ class _RpeSelector extends StatelessWidget {
               activeTrackColor: _rpeColor(value),
               inactiveTrackColor: AppColors.surfaceVariant,
               thumbColor: _rpeColor(value),
-              overlayColor: _rpeColor(value).withOpacity(0.2),
+              overlayColor: _rpeColor(value).withValues(alpha: 0.2),
               trackHeight: 4,
             ),
             child: Slider(
@@ -703,3 +703,4 @@ class _RpeSelector extends StatelessWidget {
     return AppColors.error;
   }
 }
+

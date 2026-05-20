@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -134,7 +134,7 @@ class _WarmupScreenState extends ConsumerState<WarmupScreen> {
               width: 80,
               height: 80,
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.15),
+                color: AppColors.primary.withValues(alpha: 0.15),
                 shape: BoxShape.circle,
               ),
               child: Icon(step.icon, color: AppColors.primary, size: 40),
@@ -235,3 +235,4 @@ class WarmupStep {
     required this.icon,
   });
 }
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import '../../../core/constants/app_colors.dart';
@@ -64,9 +64,9 @@ class _MiBandSetupScreenState extends ConsumerState<MiBandSetupScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: AppColors.info.withOpacity(0.1),
+                color: AppColors.info.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.info.withOpacity(0.3)),
+                border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,3 +131,4 @@ class _MiBandSetupScreenState extends ConsumerState<MiBandSetupScreen> {
     );
   }
 }
+

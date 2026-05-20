@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
@@ -74,7 +74,7 @@ class _Step3HealthState extends ConsumerState<Step3Health> {
                         notifier.setLimitaciones(current);
                       },
                       backgroundColor: AppColors.surfaceVariant,
-                      selectedColor: AppColors.error.withOpacity(0.3),
+                      selectedColor: AppColors.error.withValues(alpha: 0.3),
                       checkmarkColor: AppColors.error,
                       labelStyle: AppTextStyles.bodySmall.copyWith(
                         color: selected ? AppColors.error : AppColors.textSecondary,
@@ -158,9 +158,9 @@ class _Step3HealthState extends ConsumerState<Step3Health> {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.info.withOpacity(0.1),
+                color: AppColors.info.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AppColors.info.withOpacity(0.3)),
+                border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -181,3 +181,4 @@ class _Step3HealthState extends ConsumerState<Step3Health> {
     );
   }
 }
+

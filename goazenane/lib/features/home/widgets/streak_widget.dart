@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 
@@ -14,7 +14,7 @@ class StreakWidget extends StatelessWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         border: streak >= 7
-            ? Border.all(color: AppColors.primary.withOpacity(0.5))
+            ? Border.all(color: AppColors.primary.withValues(alpha: 0.5))
             : null,
       ),
       child: Column(
@@ -54,3 +54,4 @@ class StreakWidget extends StatelessWidget {
     return 'Eres imparable';
   }
 }
+

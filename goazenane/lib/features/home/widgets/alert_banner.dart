@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 
@@ -17,9 +17,9 @@ class AlertBanner extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: config.$1.withOpacity(0.1),
+          color: config.$1.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: config.$1.withOpacity(0.3)),
+          border: Border.all(color: config.$1.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
@@ -46,3 +46,4 @@ class AlertBanner extends StatelessWidget {
     }
   }
 }
+

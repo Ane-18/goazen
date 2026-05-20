@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart' as drift;
 import 'package:intl/intl.dart';
@@ -486,7 +486,7 @@ class _AddFoodSheetState extends ConsumerState<_AddFoodSheet> {
                   ),
                   selected: _selected?.id == food.id,
                   selectedColor: AppColors.primary,
-                  selectedTileColor: AppColors.primary.withOpacity(0.1),
+                  selectedTileColor: AppColors.primary.withValues(alpha: 0.1),
                   onTap: () => setState(() => _selected = food),
                 );
               },
@@ -543,3 +543,4 @@ class _LoadingCard extends StatelessWidget {
     );
   }
 }
+

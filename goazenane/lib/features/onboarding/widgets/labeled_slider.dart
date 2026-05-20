@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 
@@ -42,7 +42,7 @@ class LabeledSlider extends StatelessWidget {
             activeTrackColor: AppColors.primary,
             inactiveTrackColor: AppColors.surfaceElevated,
             thumbColor: AppColors.primary,
-            overlayColor: AppColors.primary.withOpacity(0.2),
+            overlayColor: AppColors.primary.withValues(alpha: 0.2),
             trackHeight: 4,
           ),
           child: Slider(
@@ -63,3 +63,4 @@ class LabeledSlider extends StatelessWidget {
     );
   }
 }
+

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 
@@ -28,7 +28,7 @@ class OptionChip extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            color: selected ? AppColors.primary.withOpacity(0.15) : AppColors.surfaceVariant,
+            color: selected ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surfaceVariant,
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: selected ? AppColors.primary : Colors.transparent,
@@ -64,3 +64,4 @@ class OptionChip extends StatelessWidget {
     );
   }
 }
+

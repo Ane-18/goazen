@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/constants/app_colors.dart';
 import 'core/router/app_router.dart';
@@ -44,7 +44,7 @@ class GoazenaneApp extends ConsumerWidget {
       ),
       navigationBarTheme: NavigationBarThemeData(
         backgroundColor: AppColors.surface,
-        indicatorColor: AppColors.primary.withOpacity(0.2),
+        indicatorColor: AppColors.primary.withValues(alpha: 0.2),
         iconTheme: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: AppColors.primary);
@@ -75,7 +75,7 @@ class GoazenaneApp extends ConsumerWidget {
         activeTrackColor: AppColors.primary,
         inactiveTrackColor: AppColors.surfaceVariant,
         thumbColor: AppColors.primary,
-        overlayColor: AppColors.primary.withOpacity(0.2),
+        overlayColor: AppColors.primary.withValues(alpha: 0.2),
         trackHeight: 4,
       ),
       chipTheme: const ChipThemeData(
@@ -99,4 +99,5 @@ class GoazenaneApp extends ConsumerWidget {
     );
   }
 }
+
 

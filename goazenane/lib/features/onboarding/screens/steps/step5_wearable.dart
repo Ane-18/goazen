@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_text_styles.dart';
@@ -79,7 +79,7 @@ class Step5Wearable extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: item.$4.withOpacity(0.15),
+                            color: item.$4.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(item.$1, color: item.$4, size: 18),
@@ -101,7 +101,7 @@ class Step5Wearable extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: AppColors.success.withOpacity(0.1),
+                      color: AppColors.success.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
@@ -150,7 +150,7 @@ class Step5Wearable extends ConsumerWidget {
                 colors: [Color(0xFF1A1A1A), Color(0xFF242424)],
               ),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+              border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
             ),
             child: Row(
               children: [
@@ -177,3 +177,4 @@ class Step5Wearable extends ConsumerWidget {
     );
   }
 }
+
