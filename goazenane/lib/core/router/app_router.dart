@@ -13,8 +13,6 @@ import '../../features/profile/screens/profile_screen.dart';
 import '../../features/profile/screens/mi_band_setup_screen.dart';
 import '../../features/progress/screens/photo_diary_screen.dart';
 import '../../features/progress/screens/body_metrics_screen.dart';
-import '../database/app_database.dart';
-
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 

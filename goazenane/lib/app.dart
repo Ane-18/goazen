@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/constants/app_colors.dart';
 import 'core/router/app_router.dart';
-import 'core/database/app_database.dart';
-import 'core/services/database_provider.dart';
 
 class GoazenaneApp extends ConsumerWidget {
   const GoazenaneApp({super.key});
@@ -102,13 +100,3 @@ class GoazenaneApp extends ConsumerWidget {
   }
 }
 
-// Redirect a /onboarding si el usuario no completó el setup
-class _RedirectGuard extends ConsumerWidget {
-  final Widget child;
-  const _RedirectGuard({required this.child});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return child;
-  }
-}
