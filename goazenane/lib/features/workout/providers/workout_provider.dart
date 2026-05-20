@@ -4,7 +4,6 @@ import '../../../core/database/app_database.dart';
 import '../../../core/services/database_provider.dart';
 import '../../../core/utils/workout_generator.dart';
 import '../../../core/constants/app_constants.dart';
-import '../../home/providers/home_provider.dart';
 
 final workoutProgramProvider = FutureProvider<WorkoutProgram?>((ref) async {
   final user = await ref.watch(databaseProvider).userDao.getUser();
@@ -159,7 +158,7 @@ class WorkoutSessionNotifier extends StateNotifier<AsyncValue<WorkoutSession?>> 
             : 'ppl';
 
     final now = DateTime.now();
-    final programId = await _db.workoutDao.insertProgram(
+    await _db.workoutDao.insertProgram(
       WorkoutProgramsCompanion(
         userId: Value(user.id),
         nombre: Value('Programa 12 semanas — ${user.nivelExperiencia}'),
