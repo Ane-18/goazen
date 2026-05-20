@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter --version)",
+      "PowerShell(flutter *)",
+      "PowerShell(New-Item *)",
+      "Bash(git add *)"
+    ]
+  }
+}
