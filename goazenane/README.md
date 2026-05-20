@@ -2,7 +2,7 @@
 
 App de fitness femenino con base científica — recomposición corporal real.
 
-[![Build APK](https://github.com/TU_USUARIO/goazenane/actions/workflows/build.yml/badge.svg)](https://github.com/TU_USUARIO/goazenane/actions/workflows/build.yml)
+[![Build APK](https://github.com/Ane-18/goazen/actions/workflows/build.yml/badge.svg)](https://github.com/Ane-18/goazen/actions/workflows/build.yml)
 
 ---
 
@@ -87,7 +87,7 @@ Goazenane es una app móvil multiplataforma (iOS + Android) diseñada específic
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/TU_USUARIO/goazenane.git
+git clone https://github.com/Ane-18/goazen.git
 cd goazenane
 
 # Instalar dependencias
