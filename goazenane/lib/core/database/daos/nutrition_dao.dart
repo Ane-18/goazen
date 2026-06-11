@@ -76,10 +76,10 @@ class NutritionDao extends DatabaseAccessor<AppDatabase>
   Future<Map<String, double>> getTodayTotals(int userId) async {
     final logs = await getTodayLog(userId);
     return {
-      'calorias': logs.fold(0, (acc, l) => acc + l.calorias),
-      'proteinas': logs.fold(0, (acc, l) => acc + l.proteinasG),
-      'carbos': logs.fold(0, (acc, l) => acc + l.carbosG),
-      'grasas': logs.fold(0, (acc, l) => acc + l.grasasG),
+      'calorias': logs.fold<double>(0, (acc, l) => acc + l.calorias),
+      'proteinas': logs.fold<double>(0, (acc, l) => acc + l.proteinasG),
+      'carbos': logs.fold<double>(0, (acc, l) => acc + l.carbosG),
+      'grasas': logs.fold<double>(0, (acc, l) => acc + l.grasasG),
     };
   }
 
