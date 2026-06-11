@@ -34,6 +34,11 @@ jobs:
           channel: 'stable'
           cache: true
 
+      - name: Install Android NDK
+        run: |
+          yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager "ndk;27.0.12077973"
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -48,15 +53,8 @@ jobs:
         continue-on-error: true
         run: flutter test
 
-      - name: Debug Android setup
-        run: |
-          echo "=== local.properties ==="
-          cat android/local.properties 2>/dev/null || echo "MISSING"
-          echo "=== Flutter doctor ==="
-          flutter doctor -v
-
       - name: Build APK (release)
-        run: flutter build apk --release --verbose
+        run: flutter build apk --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
