@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import '../core/database/app_database.dart';
 
 List<ExercisesCompanion> get exercisesCatalog => [
@@ -318,7 +319,7 @@ List<ExercisesCompanion> get exercisesCatalog => [
       'Zancada profunda, empuja la cadera delantera hacia adelante y regresa. Alterna piernas.',
       '1. Rodilla trasera en el suelo\n2. Cadera empuja adelante, no abajo\n3. Torso erguido',
       '2-1-2-0', 'peso_corporal', 'principiante', 'cadera', ''),
-  _ex('World's greatest stretch', 'core', 'sentadilla',
+  _ex("World's greatest stretch", 'core', 'sentadilla',
       'Desde posición de flexión, coloca un pie al lado de la mano, rota el brazo hacia arriba, vuelve y al otro lado.',
       '1. Movimiento fluido\n2. No perder el apoyo de los brazos\n3. Amplitud progresiva',
       '2-1-2-0', 'peso_corporal', 'principiante', 'cadera,hombro,lumbar', 'pectoral'),
