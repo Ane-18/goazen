@@ -98,7 +98,7 @@ class NutritionCalculator {
 
     // 3. Carbos: calorías restantes
     final carbsCal = calObjetivo - protCal - grasasCal;
-    final carbosG = carbsCal > 0 ? carbsCal / AppConstants.calPerGCarb : 0;
+    final carbosG = carbsCal > 0 ? carbsCal / AppConstants.calPerGCarb : 0.0;
 
     // Agua
     double aguaMl = pesoKg * AppConstants.waterMlPerKg;

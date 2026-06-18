@@ -197,14 +197,3 @@ class Step1Physical extends ConsumerWidget {
       );
 }
 
-InputDecoration _inputDec(String hint) => InputDecoration(
-      hintText: hint,
-      hintStyle: const TextStyle(color: AppColors.textDisabled, fontSize: 14),
-      filled: true,
-      fillColor: AppColors.surfaceVariant,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide.none,
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-    );
