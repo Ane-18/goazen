@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../features/onboarding/screens/onboarding_screen.dart';
 import '../../features/home/screens/home_screen.dart';
+import '../../features/home/providers/home_provider.dart';
 import '../../features/workout/screens/workout_screen.dart';
 import '../../features/session/screens/active_session_screen.dart';
 import '../../features/session/screens/warmup_screen.dart';
@@ -13,13 +14,41 @@ import '../../features/profile/screens/profile_screen.dart';
 import '../../features/profile/screens/mi_band_setup_screen.dart';
 import '../../features/progress/screens/photo_diary_screen.dart';
 import '../../features/progress/screens/body_metrics_screen.dart';
+
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+// Escucha userProvider y notifica a GoRouter para re-evaluar el redirect
+class _RouterNotifier extends ChangeNotifier {
+  _RouterNotifier(this._ref) {
+    _ref.listen(userProvider, (_, __) => notifyListeners());
+  }
+
+  final Ref _ref;
+
+  String? redirect(BuildContext context, GoRouterState state) {
+    final userAsync = _ref.read(userProvider);
+
+    if (userAsync.isLoading) return null;
+
+    final isOnboarded = userAsync.value?.onboardingCompleto == true;
+    final goingToOnboarding = state.matchedLocation.startsWith('/onboarding');
+
+    if (!isOnboarded && !goingToOnboarding) return '/onboarding';
+    if (isOnboarded && goingToOnboarding) return '/home';
+
+    return null;
+  }
+}
+
 final routerProvider = Provider<GoRouter>((ref) {
+  final notifier = _RouterNotifier(ref);
+
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation: '/onboarding',
+    refreshListenable: notifier,
+    redirect: notifier.redirect,
     routes: [
       GoRoute(
         path: '/onboarding',
