@@ -13,6 +13,7 @@ import '../../features/profile/screens/profile_screen.dart';
 import '../../features/profile/screens/mi_band_setup_screen.dart';
 import '../../features/progress/screens/photo_diary_screen.dart';
 import '../../features/progress/screens/body_metrics_screen.dart';
+import '../../features/workout/screens/how_routine_works_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -106,6 +107,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/mi-band-setup',
         parentNavigatorKey: _rootNavigatorKey,
         builder: (context, state) => const MiBandSetupScreen(),
+      ),
+      GoRoute(
+        path: '/how-routine-works',
+        parentNavigatorKey: _rootNavigatorKey,
+        builder: (context, state) => const HowRoutineWorksScreen(),
       ),
     ],
   );

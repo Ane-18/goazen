@@ -25,6 +25,8 @@ class HomeScreen extends ConsumerWidget {
     final avgWeight = ref.watch(averageWeightLast7Provider);
     final sleepAlert = ref.watch(sleepAlertProvider);
     final hrAlert = ref.watch(hrAlertProvider);
+    // Siembra ejercicios nuevos silenciosamente al abrir home por primera vez.
+    ref.watch(exerciseSeedProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,

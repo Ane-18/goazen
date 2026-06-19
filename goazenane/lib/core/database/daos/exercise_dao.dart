@@ -50,4 +50,14 @@ class ExerciseDao extends DatabaseAccessor<AppDatabase> with _$ExerciseDaoMixin 
     final count = await customSelect('SELECT COUNT(*) as c FROM exercises').getSingle();
     return count.read<int>('c');
   }
+
+  Future<void> seedIfMissing(List<ExercisesCompanion> catalog) async {
+    final existing = await getAllExercises();
+    final existingNames = existing.map((e) => e.nombre).toSet();
+    for (final ex in catalog) {
+      if (!existingNames.contains(ex.nombre.value)) {
+        await into(exercises).insert(ex);
+      }
+    }
+  }
 }

@@ -23,6 +23,13 @@ class WorkoutScreen extends ConsumerWidget {
         backgroundColor: AppColors.background,
         title: const Text('Entrenar'),
         titleTextStyle: AppTextStyles.headlineLarge,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.help_outline, color: AppColors.textSecondary),
+            tooltip: '¿Cómo funciona?',
+            onPressed: () => context.push('/how-routine-works'),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),

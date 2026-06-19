@@ -371,6 +371,24 @@ class _ExerciseHeader extends ConsumerWidget {
                   _chip('Tempo ${ex.tempo}', AppColors.surfaceElevated),
                 ],
               ),
+              if (ex.urlGif.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    ex.urlGif,
+                    fit: BoxFit.contain,
+                    height: 160,
+                    loadingBuilder: (_, child, progress) => progress == null
+                        ? child
+                        : const SizedBox(
+                            height: 160,
+                            child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+                          ),
+                    errorBuilder: (_, __, ___) => const SizedBox(),
+                  ),
+                ),
+              ],
               const SizedBox(height: 8),
               Text(ex.descripcionTecnica,
                   style: AppTextStyles.bodyMedium,
@@ -636,6 +654,10 @@ class _SetRowState extends ConsumerState<_SetRow> {
                 onChanged: (v) => setState(() => _rpe = v!),
               ),
             ),
+            GestureDetector(
+              onTap: () => _showRpeHelpDialog(context),
+              child: const Icon(Icons.info_outline, size: 13, color: AppColors.textDisabled),
+            ),
             const SizedBox(width: 4),
             GestureDetector(
               onTap: _toggleComplete,
@@ -661,6 +683,63 @@ class _SetRowState extends ConsumerState<_SetRow> {
   }
 }
 
+void _showRpeHelpDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.surface,
+      title: const Text('¿Qué es el RPE?'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'RPE = esfuerzo percibido (1-10).',
+            style: AppTextStyles.labelLarge,
+          ),
+          const SizedBox(height: 12),
+          ...[
+            ('10', 'Al fallo total — no podías hacer ni una rep más.'),
+            ('9', '1 repetición en el tanque.'),
+            ('8', '2 reps en el tanque — serie muy exigente.'),
+            ('7', '3–4 reps en el tanque — esfuerzo notable.'),
+            ('6', 'Serie cómoda, con margen de sobra.'),
+          ].map((r) => Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: 28,
+                      child: Text(
+                        r.$1,
+                        style: AppTextStyles.labelLarge.copyWith(color: AppColors.primary),
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(r.$2, style: AppTextStyles.bodySmall),
+                    ),
+                  ],
+                ),
+              )),
+          const SizedBox(height: 10),
+          Text(
+            'Ser precisa con el RPE ayuda a la app a ajustar el peso la semana siguiente.',
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+          ),
+        ],
+      ),
+      actions: [
+        FilledButton(
+          onPressed: () => Navigator.pop(ctx),
+          style: FilledButton.styleFrom(backgroundColor: AppColors.primary),
+          child: const Text('Entendido'),
+        ),
+      ],
+    ),
+  );
+}
+
 class _RpeSelector extends StatelessWidget {
   final double value;
   final ValueChanged<double> onChanged;
@@ -681,9 +760,18 @@ class _RpeSelector extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('RPE de la sesión', style: AppTextStyles.labelLarge),
-              Text(
-                '${value.toStringAsFixed(1)} / 10',
-                style: AppTextStyles.headlineSmall.copyWith(color: AppColors.primary),
+              Row(
+                children: [
+                  Text(
+                    '${value.toStringAsFixed(1)} / 10',
+                    style: AppTextStyles.headlineSmall.copyWith(color: AppColors.primary),
+                  ),
+                  const SizedBox(width: 6),
+                  GestureDetector(
+                    onTap: () => _showRpeHelpDialog(context),
+                    child: const Icon(Icons.info_outline, size: 18, color: AppColors.textSecondary),
+                  ),
+                ],
               ),
             ],
           ),

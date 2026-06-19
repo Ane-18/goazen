@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/services/database_provider.dart';
 import '../../../core/constants/app_constants.dart';
+import '../../../data/exercises_data.dart';
 
 final userProvider = StreamProvider<User?>((ref) {
   return ref.watch(databaseProvider).userDao.watchUser();
@@ -80,4 +81,14 @@ final hrAlertProvider = FutureProvider<String?>((ref) async {
     return 'Tu frecuencia cardíaca en reposo está elevada. Considera descanso o movilidad hoy.';
   }
   return null;
+});
+
+// Siembra ejercicios nuevos del catálogo si el usuario ya completó el onboarding.
+// Usa seedIfMissing (por nombre) para no duplicar ni alterar IDs existentes.
+final exerciseSeedProvider = FutureProvider<void>((ref) async {
+  final db = ref.read(databaseProvider);
+  final count = await db.exerciseDao.countExercises();
+  if (count < exercisesCatalog.length) {
+    await db.exerciseDao.seedIfMissing(exercisesCatalog);
+  }
 });
