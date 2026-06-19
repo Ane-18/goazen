@@ -36,16 +36,14 @@ class _PhotoDiaryScreenState extends ConsumerState<PhotoDiaryScreen> {
     await File(photo.path).copy(localPath);
 
     final latest = await ref.read(databaseProvider).userDao.getLatestBodyMetric(user.id);
-    if (latest != null) {
-      await ref.read(databaseProvider).userDao.insertBodyMetric(
-        BodyMetricsCompanion(
-          userId: drift.Value(user.id),
-          fecha: drift.Value(DateTime.now()),
-          pesoKg: drift.Value(latest.pesoKg),
-          fotoPath: drift.Value(localPath),
-        ),
-      );
-    }
+    await ref.read(databaseProvider).userDao.insertBodyMetric(
+      BodyMetricsCompanion(
+        userId: drift.Value(user.id),
+        fecha: drift.Value(DateTime.now()),
+        pesoKg: drift.Value(latest?.pesoKg ?? 0.0),
+        fotoPath: drift.Value(localPath),
+      ),
+    );
     setState(() {});
   }
 

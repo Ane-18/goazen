@@ -136,8 +136,8 @@ class HomeScreen extends ConsumerWidget {
                           label: 'Sueño',
                           value: s != null ? '${s.horasTotales.toStringAsFixed(1)}h' : '--',
                           icon: Icons.bedtime_outlined,
-                          subtitle: s?.horasProfundo != null
-                              ? '${(s!.horasProfundo! / s.horasTotales * 100).round()}% profundo'
+                          subtitle: s?.horasProfundo != null && s!.horasTotales > 0
+                              ? '${(s.horasProfundo! / s.horasTotales * 100).round()}% profundo'
                               : 'Sin datos hoy',
                           color: AppColors.info,
                         ),

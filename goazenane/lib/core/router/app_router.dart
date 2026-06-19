@@ -30,6 +30,7 @@ class _RouterNotifier extends ChangeNotifier {
     final userAsync = _ref.read(userProvider);
 
     if (userAsync.isLoading) return null;
+    if (userAsync.hasError) return null;
 
     final isOnboarded = userAsync.value?.onboardingCompleto == true;
     final goingToOnboarding = state.matchedLocation.startsWith('/onboarding');
@@ -46,7 +47,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: '/onboarding',
+    initialLocation: '/home',
     refreshListenable: notifier,
     redirect: notifier.redirect,
     routes: [

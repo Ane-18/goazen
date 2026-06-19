@@ -29,6 +29,7 @@ class _ActiveSessionScreenState extends ConsumerState<ActiveSessionScreen> {
   int _restSeconds = 0;
   bool _restTimerActive = false;
   double _sessionRpe = 7.0;
+  bool _saving = false;
 
   @override
   void dispose() {
@@ -53,39 +54,53 @@ class _ActiveSessionScreenState extends ConsumerState<ActiveSessionScreen> {
   }
 
   Future<void> _finishSession(List<SessionExercise> exercises) async {
-    final db = ref.read(databaseProvider);
-    final elapsed =
-        DateTime.now().difference(_sessionStart).inMinutes;
+    if (_saving) return;
+    setState(() => _saving = true);
 
-    double totalVolume = 0;
-    double rpeSum = 0;
-    int rpeCount = 0;
+    try {
+      final db = ref.read(databaseProvider);
+      final elapsed = DateTime.now().difference(_sessionStart).inMinutes;
 
-    for (final se in exercises) {
-      final sets = await db.workoutDao.getSetsForSessionExercise(se.id);
-      for (final s in sets) {
-        if (s.completado) {
-          totalVolume += s.pesoKg * s.reps;
-          if (s.rpe != null) {
-            rpeSum += s.rpe!;
-            rpeCount++;
+      double totalVolume = 0;
+      double rpeSum = 0;
+      int rpeCount = 0;
+
+      for (final se in exercises) {
+        final sets = await db.workoutDao.getSetsForSessionExercise(se.id);
+        for (final s in sets) {
+          if (s.completado) {
+            totalVolume += s.pesoKg * s.reps;
+            if (s.rpe != null) {
+              rpeSum += s.rpe!;
+              rpeCount++;
+            }
           }
         }
       }
-    }
 
-    final rpeAvg = rpeCount > 0 ? rpeSum / rpeCount : _sessionRpe;
+      final rpeAvg = rpeCount > 0 ? rpeSum / rpeCount : _sessionRpe;
 
-    await db.workoutDao.updateSession(WorkoutSessionsCompanion(
-      id: drift.Value(widget.sessionId),
-      duracionMin: drift.Value(elapsed),
-      volumenTotalKg: drift.Value(totalVolume),
-      completada: const drift.Value(true),
-      rpePromedioSesion: drift.Value(rpeAvg),
-    ));
+      await db.workoutDao.updateSession(WorkoutSessionsCompanion(
+        id: drift.Value(widget.sessionId),
+        duracionMin: drift.Value(elapsed),
+        volumenTotalKg: drift.Value(totalVolume),
+        completada: const drift.Value(true),
+        rpePromedioSesion: drift.Value(rpeAvg),
+      ));
 
-    if (mounted) {
-      context.go('/home');
+      if (mounted) {
+        context.go('/home');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _saving = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al guardar la sesión: $e'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+      }
     }
   }
 
@@ -271,9 +286,16 @@ class _ActiveSessionScreenState extends ConsumerState<ActiveSessionScreen> {
             ),
             const SizedBox(height: 32),
             FilledButton.icon(
-              onPressed: () => _finishSession(exercises),
-              icon: const Icon(Icons.home),
-              label: const Text('Guardar y volver'),
+              onPressed: _saving ? null : () => _finishSession(exercises),
+              icon: _saving
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                          color: Colors.white, strokeWidth: 2),
+                    )
+                  : const Icon(Icons.home),
+              label: Text(_saving ? 'Guardando...' : 'Guardar y volver'),
               style: FilledButton.styleFrom(
                 backgroundColor: AppColors.success,
                 minimumSize: const Size(double.infinity, 54),
