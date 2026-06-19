@@ -8,7 +8,6 @@ import '../../features/home/providers/home_provider.dart';
 import '../../features/workout/screens/workout_screen.dart';
 import '../../features/session/screens/active_session_screen.dart';
 import '../../features/session/screens/warmup_screen.dart';
-import '../../features/nutrition/screens/nutrition_screen.dart';
 import '../../features/progress/screens/progress_screen.dart';
 import '../../features/profile/screens/profile_screen.dart';
 import '../../features/profile/screens/mi_band_setup_screen.dart';
@@ -66,10 +65,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/workout',
             builder: (context, state) => const WorkoutScreen(),
-          ),
-          GoRoute(
-            path: '/nutrition',
-            builder: (context, state) => const NutritionScreen(),
           ),
           GoRoute(
             path: '/progress',
@@ -133,7 +128,6 @@ class ScaffoldWithNav extends StatelessWidget {
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Inicio'),
           NavigationDestination(icon: Icon(Icons.fitness_center_outlined), selectedIcon: Icon(Icons.fitness_center), label: 'Entrenar'),
-          NavigationDestination(icon: Icon(Icons.restaurant_outlined), selectedIcon: Icon(Icons.restaurant), label: 'Nutrición'),
           NavigationDestination(icon: Icon(Icons.bar_chart_outlined), selectedIcon: Icon(Icons.bar_chart), label: 'Progreso'),
           NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Perfil'),
         ],
@@ -144,13 +138,12 @@ class ScaffoldWithNav extends StatelessWidget {
   int _locationToIndex(String loc) {
     if (loc.startsWith('/home')) return 0;
     if (loc.startsWith('/workout')) return 1;
-    if (loc.startsWith('/nutrition')) return 2;
-    if (loc.startsWith('/progress')) return 3;
-    return 4;
+    if (loc.startsWith('/progress')) return 2;
+    return 3;
   }
 
   void _indexToRoute(BuildContext context, int i) {
-    const routes = ['/home', '/workout', '/nutrition', '/progress', '/profile'];
+    const routes = ['/home', '/workout', '/progress', '/profile'];
     context.go(routes[i]);
   }
 }

@@ -6,7 +6,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/services/database_provider.dart';
-import '../../../core/utils/nutrition_calculator.dart';
 import '../../home/providers/home_provider.dart';
 import '../../home/widgets/phase_badge.dart';
 
@@ -46,10 +45,6 @@ class ProfileScreen extends ConsumerWidget {
 
               // FC reposo manual
               _HrEntry(userId: u.id),
-              const SizedBox(height: 16),
-
-              // Estadísticas
-              _StatsCard(user: u),
               const SizedBox(height: 16),
 
               // Mi Band
@@ -365,60 +360,6 @@ class _HrEntryState extends ConsumerState<_HrEntry> {
   }
 }
 
-class _StatsCard extends StatelessWidget {
-  final User user;
-  const _StatsCard({required this.user});
-
-  @override
-  Widget build(BuildContext context) {
-    final masaMagra = NutritionCalculator.calcMasaMagra(
-        user.pesoKg, user.porcentajeGrasa);
-    final bmr = NutritionCalculator.calcBmr(masaMagra);
-    final tdee = NutritionCalculator.calcTdee(
-        bmr, NivelActividad.moderadamenteActiva);
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Estadísticas metabólicas', style: AppTextStyles.headlineSmall),
-          const SizedBox(height: 12),
-          _row('Masa magra', '${masaMagra.toStringAsFixed(1)} kg', AppColors.info),
-          _row('BMR (Katch-McArdle)', '${bmr.toStringAsFixed(0)} kcal', AppColors.primary),
-          _row('TDEE estimado', '${tdee.toStringAsFixed(0)} kcal', AppColors.warning),
-          _row('Objetivo', _objetivoLabel(user.objetivo), AppColors.success),
-        ],
-      ),
-    );
-  }
-
-  Widget _row(String label, String value, Color color) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: AppTextStyles.bodyMedium),
-          Text(value, style: AppTextStyles.labelLarge.copyWith(color: color)),
-        ],
-      ),
-    );
-  }
-
-  String _objetivoLabel(String o) {
-    switch (o) {
-      case 'perdida_grasa': return 'Pérdida de grasa';
-      case 'ganancia_muscular': return 'Ganancia muscular';
-      default: return 'Recomposición';
-    }
-  }
-}
-
 class _MiBandCard extends ConsumerWidget {
   final User user;
   const _MiBandCard({required this.user});
@@ -537,7 +478,7 @@ class _DangerZone extends ConsumerWidget {
         backgroundColor: AppColors.surface,
         title: const Text('¿Borrar todo?'),
         content: const Text(
-            'Esta acción eliminará todos tus datos: entrenamiento, nutrición, progreso y fotos. No se puede deshacer.'),
+            'Esta acción eliminará todos tus datos: entrenamiento, progreso y fotos. No se puede deshacer.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),

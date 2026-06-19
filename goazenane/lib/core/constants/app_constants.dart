@@ -1,28 +1,4 @@
 abstract class AppConstants {
-  // Nutrición
-  static const double proteinPerKgLeanMass = 2.4;
-  static const double proteinPerKgLeanMassLuteal = 2.6;
-  static const double fatPerKgBodyWeight = 0.8;
-  static const double waterMlPerKg = 35.0;
-  static const double waterMlPerTrainingHour = 500.0;
-  static const double waterMlHiit = 300.0;
-
-  // Calorías por macro
-  static const double calPerGProtein = 4.0;
-  static const double calPerGCarb = 4.0;
-  static const double calPerGFat = 9.0;
-
-  // Factores de actividad (Katch-McArdle)
-  static const double activitySedentary = 1.2;
-  static const double activityLight = 1.375;
-  static const double activityModerate = 1.55;
-  static const double activityActive = 1.725;
-
-  // Déficit/superávit calórico
-  static const double deficitFatLoss = 0.80;        // TDEE × 0.80
-  static const double deficitRecomp = 0.925;         // TDEE × 0.925
-  static const double surplusMuscleBuild = 1.10;     // TDEE × 1.10
-
   // Sobrecarga progresiva
   static const double progressionFullCompletion = 0.025;  // +2.5%
   static const double completionThresholdFull = 1.0;
@@ -48,8 +24,6 @@ abstract class AppConstants {
 
   // Ciclo menstrual
   static const double menstrualVolumeFactor = 0.80;
-  static const double lutealCarbBoost = 0.125;           // +12.5% promedio
-  static const double trainingDaysCarbBoost = 0.15;
 
   // Cardio zonas FC
   static const double lissMinHrPercent = 0.60;

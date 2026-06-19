@@ -284,11 +284,10 @@ class _StreaksSummary extends ConsumerWidget {
     return FutureBuilder<List<int>>(
       future: Future.wait([
         ref.read(databaseProvider).workoutDao.getTrainingStreak(userId),
-        ref.read(databaseProvider).nutritionDao.getMacroStreak(userId),
         ref.read(databaseProvider).sleepDao.getSleepStreak(userId),
       ]),
       builder: (context, snap) {
-        final data = snap.data ?? [0, 0, 0];
+        final data = snap.data ?? [0, 0];
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
@@ -303,8 +302,7 @@ class _StreaksSummary extends ConsumerWidget {
               Row(
                 children: [
                   _StreakItem(icon: Icons.fitness_center, label: 'Entrenos', streak: data[0], color: AppColors.primary),
-                  _StreakItem(icon: Icons.restaurant, label: 'Macros', streak: data[1], color: AppColors.success),
-                  _StreakItem(icon: Icons.bedtime, label: 'Sueño ≥7h', streak: data[2], color: AppColors.info),
+                  _StreakItem(icon: Icons.bedtime, label: 'Sueño ≥7h', streak: data[1], color: AppColors.info),
                 ],
               ),
             ],
@@ -354,7 +352,6 @@ class _AchievementsGrid extends ConsumerWidget {
           ('30_dias', '30 días seguidos', Icons.local_fire_department),
           ('fase_completa', 'Fase completada', Icons.flag),
           ('primera_foto', 'Primera foto', Icons.photo_camera),
-          ('hidratacion_7', 'Hidratación 7 días', Icons.water_drop),
           ('suenio_7', 'Sueño ≥7h 7 días', Icons.bedtime),
           ('sin_deload', 'Sin deload', Icons.shield),
         ];

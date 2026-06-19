@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/services/database_provider.dart';
-import '../../../core/utils/nutrition_calculator.dart';
 import '../../../core/constants/app_constants.dart';
 
 final userProvider = StreamProvider<User?>((ref) {
@@ -81,16 +80,4 @@ final hrAlertProvider = FutureProvider<String?>((ref) async {
     return 'Tu frecuencia cardíaca en reposo está elevada. Considera descanso o movilidad hoy.';
   }
   return null;
-});
-
-final todayMacroProgressProvider = FutureProvider<Map<String, double>>((ref) async {
-  final user = await ref.watch(databaseProvider).userDao.getUser();
-  if (user == null) return {};
-  return ref.watch(databaseProvider).nutritionDao.getTodayTotals(user.id);
-});
-
-final todayNutritionPlanProvider = FutureProvider<NutritionPlan?>((ref) async {
-  final user = await ref.watch(databaseProvider).userDao.getUser();
-  if (user == null) return null;
-  return ref.watch(databaseProvider).nutritionDao.getTodayPlan(user.id);
 });

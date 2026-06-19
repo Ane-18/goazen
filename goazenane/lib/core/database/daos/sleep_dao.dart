@@ -144,5 +144,4 @@ class SleepDao extends DatabaseAccessor<AppDatabase> with _$SleepDaoMixin {
     return data.fold<double>(0, (acc, d) => acc + d.pasos) / data.length;
   }
 
-  Future<int> getWaterStreak(int userId) => Future.value(0); // delegado a NutritionDao
 }

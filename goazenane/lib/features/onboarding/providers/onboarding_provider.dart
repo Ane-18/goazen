@@ -1,10 +1,9 @@
+import 'dart:math' as math;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:drift/drift.dart';
 import '../../../core/database/app_database.dart';
 import '../../../core/services/database_provider.dart';
 import '../../../data/exercises_data.dart';
-import '../../../data/foods_data.dart';
-import '../../../core/utils/nutrition_calculator.dart';
 
 class OnboardingState {
   final String nombre;
@@ -117,21 +116,18 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
   void setFaseCiclo(String v) => state = state.copyWith(faseCicloActual: v);
   void setTieneMiBand(bool v) => state = state.copyWith(tieneMiBand: v);
 
+  // Navy formula body fat estimation (female) — does not require nutrition module
   void estimateBodyFatFromCircumferences() {
     final c = state.cinturaCm;
     final h = state.caderaCm;
     final n = state.cuelloCm;
-    if (c != null && h != null && n != null) {
-      final estimated = NutritionCalculator.estimateBodyFatNavyFormula(
-        alturaCm: state.alturaCm,
-        cinturaCm: c,
-        caderaCm: h,
-        cuelloCm: n,
-        sexo: 'femenino',
-      );
-      if (estimated != null) {
-        state = state.copyWith(porcentajeGrasa: estimated);
-      }
+    if (c == null || h == null || n == null) return;
+    final sumCirc = c + h - n;
+    if (sumCirc <= 0 || state.alturaCm <= 0) return;
+    final log10 = (double x) => math.log(x) / math.ln10;
+    final estimated = 163.205 * log10(sumCirc) - 97.684 * log10(state.alturaCm) - 78.387;
+    if (estimated >= 5 && estimated <= 60) {
+      state = state.copyWith(porcentajeGrasa: estimated);
     }
   }
 
@@ -169,14 +165,6 @@ class OnboardingNotifier extends StateNotifier<OnboardingState> {
       if (count == 0) {
         for (final ex in exercisesCatalog) {
           await _db.exerciseDao.insertExercise(ex);
-        }
-      }
-
-      // Seed foods
-      final foodCount = await _db.nutritionDao.countFoods();
-      if (foodCount == 0) {
-        for (final food in foodsCatalog) {
-          await _db.nutritionDao.insertFood(food);
         }
       }
 

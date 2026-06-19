@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -8,7 +8,6 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../widgets/metric_card.dart';
 import '../widgets/phase_badge.dart';
-import '../widgets/macro_ring.dart';
 import '../widgets/streak_widget.dart';
 import '../widgets/alert_banner.dart';
 
@@ -26,8 +25,6 @@ class HomeScreen extends ConsumerWidget {
     final avgWeight = ref.watch(averageWeightLast7Provider);
     final sleepAlert = ref.watch(sleepAlertProvider);
     final hrAlert = ref.watch(hrAlertProvider);
-    final macroProgress = ref.watch(todayMacroProgressProvider);
-    final nutritionPlan = ref.watch(todayNutritionPlanProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -184,14 +181,6 @@ class HomeScreen extends ConsumerWidget {
 
                 const SizedBox(height: 16),
 
-                // Progreso de macros del día
-                _MacroProgressSection(
-                  macros: macroProgress.value ?? {},
-                  plan: nutritionPlan.value,
-                ),
-
-                const SizedBox(height: 16),
-
                 // Progreso semanal
                 weekProgress.when(
                   data: (completed) => _WeeklyProgressCard(
@@ -270,86 +259,6 @@ class _TodaySessionCard extends StatelessWidget {
   }
 }
 
-class _MacroProgressSection extends StatelessWidget {
-  final Map<String, double> macros;
-  final NutritionPlan? plan;
-  const _MacroProgressSection({required this.macros, this.plan});
-
-  @override
-  Widget build(BuildContext context) {
-    final calConsumed = macros['calorias'] ?? 0;
-    final calTarget = plan?.caloriasObjetivo ?? 2000;
-    final protConsumed = macros['proteinas'] ?? 0;
-    final protTarget = plan?.proteinasG ?? 150;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Nutrición de hoy', style: AppTextStyles.headlineSmall),
-              Text(
-                '${calConsumed.round()} / ${calTarget.round()} kcal',
-                style: AppTextStyles.bodySmall.copyWith(color: AppColors.primary),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          _MacroBar(label: 'Proteína', consumed: protConsumed, target: plan?.proteinasG ?? 150, color: AppColors.info),
-          const SizedBox(height: 8),
-          _MacroBar(label: 'Carbos', consumed: macros['carbos'] ?? 0, target: plan?.carbosG ?? 200, color: AppColors.warning),
-          const SizedBox(height: 8),
-          _MacroBar(label: 'Grasas', consumed: macros['grasas'] ?? 0, target: plan?.grasasG ?? 60, color: AppColors.primary),
-        ],
-      ),
-    );
-  }
-}
-
-class _MacroBar extends StatelessWidget {
-  final String label;
-  final double consumed;
-  final double target;
-  final Color color;
-  const _MacroBar({required this.label, required this.consumed, required this.target, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    final pct = (consumed / target).clamp(0, 1).toDouble();
-    return Row(
-      children: [
-        SizedBox(
-          width: 70,
-          child: Text('$label', style: AppTextStyles.labelMedium),
-        ),
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: LinearProgressIndicator(
-              value: pct,
-              backgroundColor: AppColors.surfaceVariant,
-              valueColor: AlwaysStoppedAnimation(color),
-              minHeight: 8,
-            ),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '${consumed.round()}g',
-          style: AppTextStyles.bodySmall,
-        ),
-      ],
-    );
-  }
-}
-
 class _WeeklyProgressCard extends StatelessWidget {
   final int completed;
   final int target;
@@ -414,4 +323,3 @@ class _LoadingCard extends StatelessWidget {
     );
   }
 }
-

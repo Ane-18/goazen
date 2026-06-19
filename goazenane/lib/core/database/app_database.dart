@@ -4,7 +4,6 @@ import 'package:drift_flutter/drift_flutter.dart';
 import 'daos/user_dao.dart';
 import 'daos/exercise_dao.dart';
 import 'daos/workout_dao.dart';
-import 'daos/nutrition_dao.dart';
 import 'daos/sleep_dao.dart';
 
 part 'app_database.g.dart';
@@ -53,39 +52,6 @@ class CycleLog extends Table {
   TextColumn get faseCiclo => text()(); // menstruacion | folicular | ovulacion | lutea
   TextColumn get notasEnergia => text().withDefault(const Constant(''))();
   TextColumn get notasDolor => text().withDefault(const Constant(''))();
-}
-
-class NutritionPlans extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get userId => integer().references(Users, #id)();
-  DateTimeColumn get fecha => dateTime()();
-  RealColumn get caloriasObjetivo => real()();
-  RealColumn get proteinasG => real()();
-  RealColumn get carbosG => real()();
-  RealColumn get grasasG => real()();
-  RealColumn get aguaMl => real()();
-  BoolColumn get esDiaEntreno => boolean().withDefault(const Constant(false))();
-  RealColumn get masaMagraKgRef => real()();
-}
-
-class DailyNutritionLog extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get userId => integer().references(Users, #id)();
-  DateTimeColumn get fecha => dateTime()();
-  TextColumn get alimento => text()();
-  RealColumn get cantidadG => real()();
-  RealColumn get proteinasG => real()();
-  RealColumn get carbosG => real()();
-  RealColumn get grasasG => real()();
-  RealColumn get calorias => real()();
-  TextColumn get hora => text()();
-}
-
-class DailyWaterLog extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get userId => integer().references(Users, #id)();
-  DateTimeColumn get fecha => dateTime()();
-  RealColumn get aguaMlTotal => real()();
 }
 
 class SleepLog extends Table {
@@ -220,16 +186,6 @@ class Achievements extends Table {
   TextColumn get descripcion => text()();
 }
 
-class FoodItems extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get nombre => text()();
-  RealColumn get caloriasP100g => real()();
-  RealColumn get proteinasP100g => real()();
-  RealColumn get carbosP100g => real()();
-  RealColumn get grasasP100g => real()();
-  BoolColumn get esPersonalizado => boolean().withDefault(const Constant(false))();
-}
-
 // ─── Database ─────────────────────────────────────────────────────────────────
 
 @DriftDatabase(
@@ -237,9 +193,6 @@ class FoodItems extends Table {
     Users,
     BodyMetrics,
     CycleLog,
-    NutritionPlans,
-    DailyNutritionLog,
-    DailyWaterLog,
     SleepLog,
     WearableDaily,
     Exercises,
@@ -250,13 +203,11 @@ class FoodItems extends Table {
     CardioSessions,
     DeloadLog,
     Achievements,
-    FoodItems,
   ],
   daos: [
     UserDao,
     ExerciseDao,
     WorkoutDao,
-    NutritionDao,
     SleepDao,
   ],
 )
@@ -264,12 +215,21 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) async {
           await m.createAll();
+        },
+        onUpgrade: (m, from, to) async {
+          if (from < 2) {
+            // Drop nutrition tables removed in v2
+            await m.database.customStatement('DROP TABLE IF EXISTS nutrition_plans');
+            await m.database.customStatement('DROP TABLE IF EXISTS daily_nutrition_log');
+            await m.database.customStatement('DROP TABLE IF EXISTS daily_water_log');
+            await m.database.customStatement('DROP TABLE IF EXISTS food_items');
+          }
         },
       );
 }
