@@ -27,6 +27,7 @@ void main() async {
   // Inicializar notificaciones
   await NotificationService().init();
   await NotificationService().requestPermissions();
+  await NotificationService().scheduleWaterReminder();
 
   runApp(
     const ProviderScope(
