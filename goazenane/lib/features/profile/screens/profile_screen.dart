@@ -309,6 +309,11 @@ class _HrEntryState extends ConsumerState<_HrEntry> {
       ),
     );
     _hrCtrl.clear();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('FC en reposo guardada'), backgroundColor: AppColors.success),
+      );
+    }
   }
 
   @override

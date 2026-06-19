@@ -31,16 +31,18 @@ class WorkoutDao extends DatabaseAccessor<AppDatabase> with _$WorkoutDaoMixin {
   Future<int> insertProgram(WorkoutProgramsCompanion entry) =>
       into(workoutPrograms).insert(entry);
 
-  Future<bool> updateProgram(WorkoutProgramsCompanion entry) =>
-      update(workoutPrograms).replace(entry);
+  Future<int> updateProgram(WorkoutProgramsCompanion entry) =>
+      (update(workoutPrograms)..where((t) => t.id.equals(entry.id.value))).write(entry);
 
   // ── Sessions ──────────────────────────────────────────────────────────────
 
   Future<int> insertSession(WorkoutSessionsCompanion entry) =>
       into(workoutSessions).insert(entry);
 
-  Future<bool> updateSession(WorkoutSessionsCompanion entry) =>
-      update(workoutSessions).replace(entry);
+  // Usa write() en lugar de replace() para actualizar solo los campos presentes
+  // sin requerir todos los campos NOT NULL de la tabla.
+  Future<int> updateSession(WorkoutSessionsCompanion entry) =>
+      (update(workoutSessions)..where((t) => t.id.equals(entry.id.value))).write(entry);
 
   Future<WorkoutSession?> getSessionById(int id) =>
       (select(workoutSessions)..where((t) => t.id.equals(id))).getSingleOrNull();
@@ -126,8 +128,8 @@ class WorkoutDao extends DatabaseAccessor<AppDatabase> with _$WorkoutDaoMixin {
   Future<int> insertExerciseSet(ExerciseSetsCompanion entry) =>
       into(exerciseSets).insert(entry);
 
-  Future<bool> updateExerciseSet(ExerciseSetsCompanion entry) =>
-      update(exerciseSets).replace(entry);
+  Future<int> updateExerciseSet(ExerciseSetsCompanion entry) =>
+      (update(exerciseSets)..where((t) => t.id.equals(entry.id.value))).write(entry);
 
   Future<List<ExerciseSet>> getSetsForSessionExercise(int sessionExerciseId) =>
       (select(exerciseSets)
@@ -187,8 +189,8 @@ class WorkoutDao extends DatabaseAccessor<AppDatabase> with _$WorkoutDaoMixin {
   Future<int> insertDeloadLog(DeloadLogCompanion entry) =>
       into(deloadLog).insert(entry);
 
-  Future<bool> updateDeloadLog(DeloadLogCompanion entry) =>
-      update(deloadLog).replace(entry);
+  Future<int> updateDeloadLog(DeloadLogCompanion entry) =>
+      (update(deloadLog)..where((t) => t.id.equals(entry.id.value))).write(entry);
 
   Future<DeloadLogData?> getActiveDeload(int userId) =>
       (select(deloadLog)

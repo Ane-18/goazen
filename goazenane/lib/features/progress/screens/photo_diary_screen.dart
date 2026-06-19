@@ -21,11 +21,39 @@ class PhotoDiaryScreen extends ConsumerStatefulWidget {
 class _PhotoDiaryScreenState extends ConsumerState<PhotoDiaryScreen> {
   final _picker = ImagePicker();
 
-  Future<void> _takePhoto() async {
+  Future<void> _addPhoto() async {
+    final source = await showModalBottomSheet<ImageSource>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            ListTile(
+              leading: const Icon(Icons.camera_alt, color: AppColors.primary),
+              title: const Text('Cámara'),
+              onTap: () => Navigator.pop(ctx, ImageSource.camera),
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library, color: AppColors.primary),
+              title: const Text('Galería'),
+              onTap: () => Navigator.pop(ctx, ImageSource.gallery),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+    if (source == null || !mounted) return;
+
     final user = ref.read(userProvider).value;
     if (user == null) return;
 
-    final photo = await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+    final photo = await _picker.pickImage(source: source, imageQuality: 80);
     if (photo == null) return;
 
     final dir = await getApplicationDocumentsDirectory();
@@ -59,8 +87,8 @@ class _PhotoDiaryScreenState extends ConsumerState<PhotoDiaryScreen> {
         titleTextStyle: AppTextStyles.headlineLarge,
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _takePhoto,
-        icon: const Icon(Icons.camera_alt),
+        onPressed: _addPhoto,
+        icon: const Icon(Icons.add_a_photo),
         label: const Text('Nueva foto'),
         backgroundColor: AppColors.primary,
       ),
@@ -140,10 +168,31 @@ class _PhotoDiaryScreenState extends ConsumerState<PhotoDiaryScreen> {
     showDialog(
       context: context,
       builder: (ctx) => Dialog(
-        backgroundColor: Colors.transparent,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Image.file(File(m.fotoPath)),
+        backgroundColor: Colors.black,
+        insetPadding: EdgeInsets.zero,
+        child: Stack(
+          children: [
+            SizedBox.expand(
+              child: InteractiveViewer(
+                child: Center(child: Image.file(File(m.fotoPath))),
+              ),
+            ),
+            Positioned(
+              top: 40,
+              right: 16,
+              child: GestureDetector(
+                onTap: () => Navigator.pop(ctx),
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    color: Colors.black54,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.close, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -39,7 +39,7 @@ class ProgressScreen extends ConsumerWidget {
                     child: _QuickActionCard(
                       icon: Icons.photo_camera,
                       label: 'Foto progreso',
-                      onTap: () => context.go('/photos'),
+                      onTap: () => context.push('/photos'),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -47,7 +47,7 @@ class ProgressScreen extends ConsumerWidget {
                     child: _QuickActionCard(
                       icon: Icons.straighten,
                       label: 'Medidas',
-                      onTap: () => context.go('/body-metrics'),
+                      onTap: () => context.push('/body-metrics'),
                     ),
                   ),
                 ],
@@ -83,7 +83,8 @@ class _WeightChart extends ConsumerWidget {
     return FutureBuilder<List<BodyMetric>>(
       future: ref.read(databaseProvider).userDao.getBodyMetrics(userId),
       builder: (context, snap) {
-        final metrics = snap.data ?? [];
+        final allMetrics = snap.data ?? [];
+        final metrics = allMetrics.where((m) => m.pesoKg > 0).toList();
         if (metrics.isEmpty) {
           return _emptyCard('Peso semanal', 'Aún no hay datos de peso registrados.');
         }
@@ -370,6 +371,7 @@ class _AchievementsGrid extends ConsumerWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 4,
+                childAspectRatio: 0.72,
                 mainAxisSpacing: 12,
                 crossAxisSpacing: 12,
                 children: allAchievements.map((a) {

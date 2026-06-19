@@ -25,19 +25,42 @@ class _BodyMetricsScreenState extends ConsumerState<BodyMetricsScreen> {
   Future<void> _save() async {
     final user = ref.read(userProvider).value;
     if (user == null) return;
-    await ref.read(databaseProvider).userDao.insertBodyMetric(
-      BodyMetricsCompanion(
-        userId: drift.Value(user.id),
-        fecha: drift.Value(DateTime.now()),
-        pesoKg: drift.Value(double.tryParse(_pesoCtrl.text) ?? user.pesoKg),
-        cinturaCm: drift.Value(double.tryParse(_cinturaCtrl.text)),
-        caderaCm: drift.Value(double.tryParse(_caderaCtrl.text)),
-        pechoCm: drift.Value(double.tryParse(_pechoCtrl.text)),
-        brazoCm: drift.Value(double.tryParse(_brazoCtrl.text)),
-        musloCm: drift.Value(double.tryParse(_musloCtrl.text)),
-      ),
-    );
-    if (mounted) Navigator.pop(context);
+
+    final allEmpty = [_pesoCtrl, _cinturaCtrl, _caderaCtrl, _pechoCtrl, _brazoCtrl, _musloCtrl]
+        .every((c) => c.text.trim().isEmpty);
+    if (allEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Introduce al menos una medida'), backgroundColor: AppColors.warning),
+      );
+      return;
+    }
+
+    try {
+      await ref.read(databaseProvider).userDao.insertBodyMetric(
+        BodyMetricsCompanion(
+          userId: drift.Value(user.id),
+          fecha: drift.Value(DateTime.now()),
+          pesoKg: drift.Value(double.tryParse(_pesoCtrl.text) ?? 0.0),
+          cinturaCm: drift.Value(double.tryParse(_cinturaCtrl.text)),
+          caderaCm: drift.Value(double.tryParse(_caderaCtrl.text)),
+          pechoCm: drift.Value(double.tryParse(_pechoCtrl.text)),
+          brazoCm: drift.Value(double.tryParse(_brazoCtrl.text)),
+          musloCm: drift.Value(double.tryParse(_musloCtrl.text)),
+        ),
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Medidas guardadas'), backgroundColor: AppColors.success),
+        );
+        Navigator.pop(context);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al guardar: $e'), backgroundColor: AppColors.error),
+        );
+      }
+    }
   }
 
   @override
