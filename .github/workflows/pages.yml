@@ -1,4 +1,5 @@
 name: Publicar web (GitHub Pages)
+# Requiere Settings → Pages → Source: "GitHub Actions". Publica web/ en https://ane-18.github.io/goazen/
 
 on:
   push:
