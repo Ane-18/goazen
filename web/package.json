@@ -1,0 +1,10 @@
+{
+  "name": "goazen-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "start": "node tools/serve.cjs",
+    "icons": "node tools/make-icons.cjs"
+  }
+}
