@@ -1,7 +1,37 @@
 import * as store from '../store.js';
-import { esc, fmtDate, confirmDialog, WEEKDAY_NAMES } from '../ui.js';
+import { esc, fmtDate, confirmDialog, rangeText, icons, WEEKDAY_NAMES } from '../ui.js';
 import { DAY_MS } from '../progression.js';
 import { startSession } from './session.js';
+import { showGuide } from '../guide.js';
+
+const weekdayOf = (iso) => ((new Date(`${iso}T00:00:00Z`).getUTCDay() + 6) % 7) + 1; // 1 = lunes
+const longDate = (iso) => fmtDate(iso, { weekday: 'long', day: 'numeric', month: 'long' });
+
+// Semana de prueba: se entrena sin apuntar nada hasta block.startDate.
+function trialCard(block, t) {
+  const range = `${fmtDate(block.trialStart, { day: 'numeric' })}–${fmtDate(new Date(Date.parse(block.startDate) - DAY_MS).toISOString().slice(0, 10), { day: 'numeric', month: 'long' })}`;
+  if (t < block.trialStart) {
+    const n = Math.round((Date.parse(block.trialStart) - Date.parse(t)) / DAY_MS);
+    return `<div class="card accent stack">
+      <div class="eyebrow">Empiezas con la semana de prueba</div>
+      <h2 style="font-size:1.4rem;margin:0">${esc(longDate(block.trialStart))}</h2>
+      <p class="muted">Faltan ${n} ${n === 1 ? 'día' : 'días'}. La primera semana (${esc(range)}) entrenas los 4 días <strong>sin apuntar nada</strong>: sirve para aprender las máquinas, encontrar tu peso y ver si algún ejercicio te molesta. Empiezas a apuntar el ${esc(longDate(block.startDate))}.</p>
+      <a class="btn btn-block" href="#/plan">Ver lo que toca</a>
+      <a class="btn btn-ghost btn-block btn-sm" href="#/actividad">Ver calendario</a>
+    </div>`;
+  }
+  const day = block.days.find((d) => d.weekday === weekdayOf(t));
+  const nextDay = block.days.find((d) => d.weekday > weekdayOf(t));
+  const how = `<div class="note primary small">En cada ejercicio: 1 serie de calentamiento muy ligera y <strong>2 series de 12–15</strong>. Busca un peso con el que las últimas repeticiones cuesten, con la técnica perfecta y dejando unas 3 en reserva. Si te sobran más, sube una placa; si no llegas a 12, baja una. Si algo molesta el brazo más de 3 sobre 10, déjalo y coméntalo.</div>`;
+  return `<div class="card accent stack">
+    <div><div class="eyebrow">Semana de prueba · no se apunta nada</div>
+    ${day
+      ? `<h2 style="font-size:1.4rem;margin:2px 0 0">Hoy: ${esc(day.name)}</h2><p class="muted" style="margin:0">${esc(day.subtitle)}</p>`
+      : `<h2 style="font-size:1.4rem;margin:2px 0 0">Hoy descansas</h2>${nextDay ? `<p class="muted" style="margin:0">Próximo: ${esc(WEEKDAY_NAMES[nextDay.weekday].toLowerCase())}, ${esc(nextDay.name)}</p>` : ''}`}</div>
+    ${day ? `${how}<ul class="list">${day.items.map((it) => `<li class="row spread"><span class="grow">${esc(store.exercises()[it.exerciseId]?.name ?? it.exerciseId)}<br><span class="small muted num">2 × ${'12–15'}${/zancadas/.test(it.exerciseId) ? ' pasos por pierna, sin peso' : ''}</span></span><button class="btn-sm btn-ghost" data-guide="${esc(it.exerciseId)}">${icons.info} Cómo se hace</button></li>`).join('')}</ul>` : ''}
+    <p class="small muted" style="margin:0">El ${esc(longDate(block.startDate))} empieza la semana 1: desde ese día apuntas cada entreno y la app te irá diciendo qué peso usar.</p>
+  </div>`;
+}
 
 export function render() {
   const st = store.get();
@@ -21,6 +51,8 @@ export function render() {
       <div><div class="eyebrow">Entrenamiento a medias</div><h2>${esc(day?.name ?? '')} · ${esc(day?.subtitle ?? '')}</h2></div>
       <a class="btn btn-primary btn-block" href="#/sesion/${active.id}">Continuar</a>
     </div>`;
+  } else if (!started && block.trialStart && t < block.startDate) {
+    html += trialCard(block, t);
   } else if (!started && daysLeft > 0) {
     html += `<div class="card accent stack">
       <div class="eyebrow">Próximo entrenamiento</div>
@@ -70,6 +102,7 @@ export function render() {
 }
 
 export function mount(root) {
+  root.querySelectorAll('[data-guide]').forEach((b) => (b.onclick = () => showGuide(b.dataset.guide)));
   root.querySelectorAll('[data-start]').forEach((b) => (b.onclick = () => {
     const [w, d] = b.dataset.start.split('|');
     startSession(store.activeBlock().id, Number(w), d);

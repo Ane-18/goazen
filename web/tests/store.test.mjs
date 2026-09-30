@@ -3,14 +3,15 @@ import assert from 'node:assert/strict';
 import { initialState, migrate } from '../js/store.js';
 import { EXERCISE_BY_ID } from '../js/data/exercises.js';
 
-test('perfil nuevo: Bloque 1 desde el 19 de octubre, sin historial de Ane', () => {
+test('perfil nuevo: semana de prueba el 19 de octubre, apunta desde el 26, sin historial de Ane', () => {
   const s = initialState('nuevo', 'Miren');
   assert.deepEqual(s.profile, { kind: 'nuevo', name: 'Miren' });
   assert.equal(s.sessions.length, 0);
   assert.equal(s.blocks.length, 1);
   const b = s.blocks[0];
   assert.equal(s.activeBlockId, b.id);
-  assert.equal(b.startDate, '2026-10-19');
+  assert.equal(b.trialStart, '2026-10-19');
+  assert.equal(b.startDate, '2026-10-26');
   assert.deepEqual(b.rir, [2, 3]);
   assert.deepEqual(b.days.map((d) => d.weekday), [1, 2, 4, 5]);
   for (const d of b.days) for (const it of d.items) assert.ok(EXERCISE_BY_ID[it.exerciseId], it.exerciseId);
@@ -34,4 +35,18 @@ test('una copia del perfil nuevo no se mezcla con los datos de Ane', () => {
   assert.equal(m.profile.name, 'Miren');
   assert.equal(m.sessions.length, 0);
   assert.ok(!m.blocks.some((b) => b.id === 'bloque3'));
+});
+
+test('perfil nuevo creado antes de la semana de prueba → se actualiza al plan nuevo', () => {
+  const old = JSON.parse(JSON.stringify(initialState('nuevo', 'Miren')));
+  const b = old.blocks[0];
+  delete b.rev; delete b.trialStart; b.startDate = '2026-10-19';
+  const started = JSON.parse(JSON.stringify(old));
+  const m = migrate(old);
+  assert.equal(m.blocks[0].trialStart, '2026-10-19');
+  assert.equal(m.blocks[0].startDate, '2026-10-26');
+  assert.equal(m.profile.name, 'Miren');
+  // Con entrenos apuntados, no se toca.
+  started.sessions.push({ id: 'x', blockId: b.id, week: 1, dayId: 'd1', date: '2026-10-19', finished: true, entries: [] });
+  assert.equal(migrate(started).blocks[0].startDate, '2026-10-19');
 });

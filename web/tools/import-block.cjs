@@ -1,10 +1,10 @@
 // Convierte un Excel de plan (hojas "Dia 1"…"Dia N") en un bloque listo para la app.
-// Uso: node web/tools/import-block.cjs <excel> <salida.js> <NOMBRE_EXPORT> <id> "<nombre>" <inicio yyyy-mm-dd> <rirMin> <rirMax> ["descripción"]
+// Uso: node web/tools/import-block.cjs <excel> <salida.js> <NOMBRE_EXPORT> <id> "<nombre>" <inicio yyyy-mm-dd> <rirMin> <rirMax> ["descripción"] [inicio semana de prueba] [rev]
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const [file, out, exportName, id, name, startDate, rirMin, rirMax, description = ''] = process.argv.slice(2);
+const [file, out, exportName, id, name, startDate, rirMin, rirMax, description = '', trialStart = '', rev = '1'] = process.argv.slice(2);
 if (!rirMax) {
   console.error('Faltan argumentos. Mira el comentario de la primera línea.');
   process.exit(1);
@@ -27,7 +27,10 @@ const sheets = JSON.parse(JSON.stringify(Object.fromEntries(wb.SheetNames.map((n
   const block = {
     id,
     name,
+    rev: Number(rev), // súbelo al cambiar el plan: store.js lo actualiza en el móvil si aún no se ha empezado
     weeks: res.weeks,
+    // Semana de prueba: se entrena sin apuntar nada hasta startDate.
+    ...(trialStart ? { trialStart } : {}),
     startDate,
     rir: [Number(rirMin), Number(rirMax)],
     description,

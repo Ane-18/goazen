@@ -2,18 +2,20 @@
 export const PLAN_BLOQUE1 = {
  "id": "bloque1",
  "name": "Bloque 1",
+ "rev": 2,
  "weeks": [
   1,
   2,
   3,
   4
  ],
- "startDate": "2026-10-19",
+ "trialStart": "2026-10-19",
+ "startDate": "2026-10-26",
  "rir": [
   2,
   3
  ],
- "description": "Semanas 1–2: aprender la técnica (2 series, 12–15 reps, RIR 3). Semanas 3–4: 3 series (el remo, 3–4), 10–12 reps en los principales, RIR 2.",
+ "description": "Semana de prueba (19–25 oct): sin apuntar. Semanas 1–2: 2 series de 12–15, RIR 3. Semanas 3–4: 3 series (el remo, 3–4), 10–12 reps en los principales, RIR 2.",
  "days": [
   {
    "id": "d1",

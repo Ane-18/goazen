@@ -13,7 +13,7 @@ let month = null; // 'YYYY-MM' que se está viendo
 function plannedDays(block, t) {
   const weekdays = new Set(block.days.map((d) => d.weekday).filter(Boolean));
   if (!weekdays.size || !block.startDate || !store.nextSlot(block)) return new Set();
-  const from = Math.max(utc(t), utc(block.startDate));
+  const from = Math.max(utc(t), utc(block.trialStart ?? block.startDate));
   const monday = utc(block.startDate) - (weekdayOf(block.startDate) - 1) * DAY_MS;
   const until = monday + block.weeks.length * 7 * DAY_MS;
   const out = new Set();

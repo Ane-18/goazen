@@ -75,10 +75,13 @@ export function migrate(s) {
   const base = initialState(PROFILES[profile.kind] ? profile.kind : 'ane', profile.name);
   const out = { ...base, ...s, profile, settings: { ...base.settings, ...s.settings } };
   if (out.settings.cardioSessionsGoal === 2) out.settings.cardioSessionsGoal = 4; // objetivo actualizado
-  // Bloque 3 actualizado (nuevo orden de días, fecha de inicio…): se sustituye mientras no se haya empezado.
-  const i3 = out.blocks.findIndex((b) => b.id === BLOCK_3.id);
-  if (i3 !== -1 && (out.blocks[i3].rev ?? 1) < BLOCK_3.rev && !out.sessions.some((x) => x.blockId === BLOCK_3.id)) {
-    out.blocks[i3] = structuredClone(BLOCK_3);
+  // Planes incluidos en la app que se han actualizado (orden de días, fechas, semana de prueba…):
+  // se sustituyen mientras no se haya apuntado ningún entreno en ellos.
+  for (const plan of [BLOCK_3, PLAN_BLOQUE1]) {
+    const i = out.blocks.findIndex((b) => b.id === plan.id);
+    if (i !== -1 && (out.blocks[i].rev ?? 1) < plan.rev && !out.sessions.some((x) => x.blockId === plan.id)) {
+      out.blocks[i] = structuredClone(plan);
+    }
   }
   return out;
 }

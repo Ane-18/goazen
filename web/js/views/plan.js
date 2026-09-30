@@ -1,5 +1,5 @@
 import * as store from '../store.js';
-import { esc, dayLabel, muscleName, rangeText, icons, modal, confirmDialog, toast } from '../ui.js';
+import { esc, dayLabel, fmtDate, muscleName, rangeText, icons, modal, confirmDialog, toast } from '../ui.js';
 import { blockVolume, pickExercise } from '../coach.js';
 import { volumeStatus, fmt } from '../progression.js';
 import { MUSCLES } from '../data/exercises.js';
@@ -15,7 +15,9 @@ export function render() {
   const ex = store.exercises();
   if (!block.weeks.includes(selectedWeek)) selectedWeek = store.nextSlot(block)?.week ?? block.weeks[0];
 
+  const trial = block.trialStart && store.today() < block.startDate && !store.get().sessions.some((s) => s.blockId === block.id);
   let html = `<h1>${esc(block.name)}</h1>
+    ${trial ? `<div class="note primary" style="margin-bottom:12px"><strong>Semana de prueba (${esc(fmtDate(block.trialStart, { day: 'numeric', month: 'short' }))} – ${esc(fmtDate(new Date(Date.parse(block.startDate) - 86400000).toISOString().slice(0, 10), { day: 'numeric', month: 'short' }))}):</strong> haz los ejercicios de cada día con 2 series de 12–15, sin apuntar nada. La semana 1 empieza el ${esc(fmtDate(block.startDate, { weekday: 'long', day: 'numeric', month: 'long' }))}.</div>` : ''}
     <div class="chips" role="tablist" style="margin:12px 0">${block.weeks.map((w) =>
       `<button class="chip ${w === selectedWeek ? 'on' : ''}" data-week="${w}" role="tab" aria-selected="${w === selectedWeek}">Semana ${w}</button>`).join('')}</div>`;
 

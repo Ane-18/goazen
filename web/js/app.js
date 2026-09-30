@@ -10,7 +10,7 @@ import * as more from './views/more.js';
 import * as report from './views/report.js';
 import * as welcome from './views/welcome.js';
 
-window.GOAZEN_VERSION = '1.6.0';
+window.GOAZEN_VERSION = '1.7.0';
 
 const routes = [
   { re: /^#?\/?$/, tab: 'home', render: home.render, mount: home.mount },
