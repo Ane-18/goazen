@@ -3,6 +3,7 @@ import { esc, fmtDate, muscleName, rangeText, icons, toast, modal, confirmDialog
 import { suggestionFor, stallFor, historyOf, lastText, pickExercise, isLoadless, STALL_TIPS } from '../coach.js';
 import { fmt, bestSet, workingSets } from '../progression.js';
 import { startRest, stop as stopRest } from '../timer.js';
+import { showGuide } from '../guide.js';
 
 const expanded = new Map(); // sessionId → Set de índices abiertos
 let wakeLock = null;
@@ -130,6 +131,7 @@ function entryCard(s, e, i) {
       <div class="row wrap">
         <button class="btn-sm" data-add-set>${icons.plus} Serie</button>
         ${e.sets.length > 1 ? `<button class="btn-sm btn-ghost" data-del-set>Quitar serie</button>` : ''}
+        <button class="btn-sm btn-ghost" data-guide style="margin-left:auto">${icons.info} Cómo se hace</button>
       </div>
       ${why.length ? `<details style="margin-top:10px"><summary>¿Por qué este peso?</summary>
         <div class="small muted" style="margin-top:6px">${why.map((w) => `<p>${esc(w)}</p>`).join('')}</div></details>` : ''}
@@ -226,6 +228,7 @@ export function mount(root, rerender, { id }) {
       });
       return refreshCard(i);
     }
+    if (t.closest('[data-guide]')) return showGuide(s().entries[i].exerciseId);
     if (t.closest('[data-swap]')) return swapExercise(s(), i, rerender);
     if (t.closest('[data-remove-ex]')) {
       store.update(() => s().entries.splice(i, 1));

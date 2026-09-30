@@ -75,6 +75,8 @@ export const icons = {
   x: svg('<path d="M6 6l12 12M18 6L6 18"/>'),
   up: svg('<path d="M12 19V5M6 11l6-6 6 6"/>'),
   down: svg('<path d="M12 5v14M6 13l6 6 6-6"/>'),
+  play: svg('<path d="M7 4v16l13-8z"/>'),
+  info: svg('<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5v.5"/>'),
   alert: svg('<path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.5"/>'),
 };
 

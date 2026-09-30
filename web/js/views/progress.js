@@ -3,6 +3,7 @@ import { esc, fmtDate, muscleName, icons, toast } from '../ui.js';
 import { historyOf, lastText, stallFor } from '../coach.js';
 import { bestSet, fmt } from '../progression.js';
 import { lineChart, hydrateCharts } from '../charts.js';
+import { guideHtml } from '../guide.js';
 
 export function renderList() {
   const block = store.activeBlock();
@@ -69,6 +70,7 @@ export function renderDetail({ id }) {
       <p class="small muted">Si la línea sube, estás progresando. Toca la gráfica para ver cada día.</p>
       ${lineChart([{ name: '1RM estimado', points }], { unit: 'kg', ariaLabel: `Evolución de la fuerza estimada en ${ex.name}` })}
     </div>` : ''}
+    <details class="card"><summary><strong>Cómo se hace</strong></summary><div style="margin-top:10px">${guideHtml(id)}</div></details>
     ${stallFor(id) ? `<div class="note warn" style="margin-top:12px">Sin progreso en peso ni repeticiones en las últimas 3 sesiones.</div>` : ''}
     <details class="card">
       <summary><strong>Cuánto subir de peso</strong></summary><div style="margin-top:10px">

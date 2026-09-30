@@ -5,6 +5,7 @@ import { volumeStatus, fmt } from '../progression.js';
 import { MUSCLES } from '../data/exercises.js';
 import { loadXlsx } from '../export.js';
 import { parseBlock } from '../importer.js';
+import { showGuide } from '../guide.js';
 
 let selectedWeek = null;
 
@@ -129,6 +130,7 @@ async function editItem(dayId, i, rerender) {
      <div class="row wrap">
        <button class="btn-sm" data-a="up" ${i === 0 ? 'disabled' : ''}>${icons.up} Subir</button>
        <button class="btn-sm" data-a="down" ${i === day.items.length - 1 ? 'disabled' : ''}>${icons.down} Bajar</button>
+       <button class="btn-sm" data-a="guide">${icons.info} Cómo se hace</button>
        <button class="btn-sm" data-a="swap">${icons.swap} Sustituir</button>
        <button class="btn-sm btn-danger" data-a="remove">Quitar</button>
      </div>
@@ -136,6 +138,7 @@ async function editItem(dayId, i, rerender) {
     (dlg, close) => {
       dlg.querySelectorAll('[data-a]').forEach((b) => (b.onclick = () => {
         const a = b.dataset.a;
+        if (a === 'guide') return showGuide(it.exerciseId);
         if (a !== 'save') return close({ a });
         const v = (n) => dlg.querySelector(`[name=${n}]`).value;
         const reps = {};

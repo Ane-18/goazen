@@ -380,3 +380,8 @@ details[open] > summary::before { content: '▾ '; }
 .rbar { height: 8px; border-radius: 0 4px 4px 0; background: var(--primary); }
 .rbar.neg { background: var(--bad); }
 a.rlink { color: inherit; text-decoration: none; }
+
+/* ── Ficha de ejercicio ──────────────────────────────── */
+.guide h3 { margin-bottom: 6px; }
+.guide ol, .guide ul { margin: 0; padding-left: 20px; }
+.guide li + li { margin-top: 6px; }

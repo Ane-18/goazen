@@ -9,7 +9,7 @@ import * as body from './views/body.js';
 import * as more from './views/more.js';
 import * as report from './views/report.js';
 
-window.GOAZEN_VERSION = '1.4.0';
+window.GOAZEN_VERSION = '1.5.0';
 
 const routes = [
   { re: /^#?\/?$/, tab: 'home', render: home.render, mount: home.mount },
