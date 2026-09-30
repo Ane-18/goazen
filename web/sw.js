@@ -1,6 +1,6 @@
 // Service worker: guarda la app para que funcione sin conexión en el gimnasio.
 // Cambia VERSION en cada publicación para que el móvil descargue la nueva.
-const VERSION = 'goazen-v1.5.0';
+const VERSION = 'goazen-v1.6.0';
 const FILES = [
   './',
   'index.html',
@@ -28,6 +28,8 @@ const FILES = [
   'js/views/report.js',
   'js/report.js',
   'js/guide.js',
+  'js/views/welcome.js',
+  'js/data/plan-bloque1.js',
   'js/data/guides.js',
   'vendor/xlsx.mini.min.js',
   'icons/icon.svg',

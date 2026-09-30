@@ -86,16 +86,27 @@ export function parseSetsReps(text, weeks) {
   const re = /(?:sem(?:ana)?s?\s*(\d+)(?:\s*-\s*(\d+))?\s*:\s*)?(\d+)(?:\s*-\s*(\d+))?\s*x\s*(\d+)(?:\s*-\s*(\d+))?/gi;
   const parts = [...String(text ?? '').matchAll(re)];
   if (!parts.length) return null;
-  const sets = [Number(parts[0][3]), Number(parts[0][4] ?? parts[0][3])];
+  // Series: de la menor a la mayor de todas las partes ("Sem 1-2: 2 x … | Sem 3-4: 3 x …" → 2–3).
+  const sets = [
+    Math.min(...parts.map((m) => Number(m[3]))),
+    Math.max(...parts.map((m) => Number(m[4] ?? m[3]))),
+  ];
   const reps = {};
-  for (const w of weeks) reps[w] = [Number(parts[0][5]), Number(parts[0][6] ?? parts[0][5])];
+  const setsByWeek = {};
+  const setsOf = (m) => [Number(m[3]), Number(m[4] ?? m[3])];
+  for (const w of weeks) {
+    reps[w] = [Number(parts[0][5]), Number(parts[0][6] ?? parts[0][5])];
+    setsByWeek[w] = setsOf(parts[0]);
+  }
   for (const m of parts) {
     if (!m[1]) continue;
     const from = Number(m[1]);
     const to = Number(m[2] ?? m[1]);
-    for (const w of weeks) if (w >= from && w <= to) reps[w] = [Number(m[5]), Number(m[6] ?? m[5])];
+    for (const w of weeks) if (w >= from && w <= to) { reps[w] = [Number(m[5]), Number(m[6] ?? m[5])]; setsByWeek[w] = setsOf(m); }
   }
-  return { sets, reps };
+  // Solo si las series cambian entre semanas.
+  const varies = new Set(Object.values(setsByWeek).map(String)).size > 1;
+  return varies ? { sets, reps, setsByWeek } : { sets, reps };
 }
 
 const cap = (s) => String(s ?? '').trim().replace(/^\w/, (c) => c.toUpperCase());
@@ -156,6 +167,7 @@ export function parseBlock(sheets, exercises, defaultWeeks = [1, 2, 3, 4]) {
       items.push({
         exerciseId: match.id,
         sets: sr.sets,
+        ...(sr.setsByWeek ? { setsByWeek: sr.setsByWeek } : {}),
         reps: sr.reps,
         note,
         optional: /opcional/i.test(note),

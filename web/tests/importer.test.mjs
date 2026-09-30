@@ -23,6 +23,9 @@ test('parseSetsReps: rango simple y por semanas', () => {
   const r = parseSetsReps('Sem 9-10: 3-4 x 6-8 | Sem 11-12: 3-4 x 10-12', [9, 10, 11, 12]);
   assert.deepEqual(r.reps, { 9: [6, 8], 10: [6, 8], 11: [10, 12], 12: [10, 12] });
   assert.equal(parseSetsReps('sin datos', [1]), null);
+  // Series que cambian por semana
+  assert.deepEqual(parseSetsReps('Sem 1-2: 2 x 12-15 | Sem 3-4: 3 x 10-12', [1, 2, 3, 4]).setsByWeek, { 1: [2, 2], 2: [2, 2], 3: [3, 3], 4: [3, 3] });
+  assert.equal(r.setsByWeek, undefined); // mismas series en todas las semanas
 });
 
 test('reconoce nombres del catálogo', () => {
@@ -48,4 +51,32 @@ test('el Excel del Bloque 3 se importa igual que el bloque cargado a mano', () =
     }
   }
   assert.equal(res.newExercises.length, 0);
+});
+
+test('el Excel del Bloque 1 de la madre: todo del catálogo, torso lunes/jueves y sin ejercicios por encima del hombro', () => {
+  const res = parseBlock(sheetsOf('./fixtures/madre-bloque1.xlsx'), EXERCISE_BY_ID);
+  assert.deepEqual(res.weeks, [1, 2, 3, 4]);
+  assert.deepEqual(res.warnings, []);
+  assert.deepEqual(res.newExercises, []);
+  assert.deepEqual(res.days.map((d) => d.weekday), [1, 2, 4, 5]); // lunes, martes, jueves, viernes
+  assert.match(res.days[0].subtitle, /^Torso/);
+  assert.match(res.days[1].subtitle, /^Pierna/);
+  const all = res.days.flatMap((d) => d.items);
+  assert.equal(all.length, 24);
+  assert.deepEqual(res.days.map((d) => d.items.length), [6, 6, 6, 6]);
+  // Los días de torso empiezan con rotación externa y repiten la extensión de tríceps en polea.
+  for (const d of [res.days[0], res.days[2]]) {
+    assert.equal(d.items[0].exerciseId, 'rotacion_externa_polea');
+    assert.ok(d.items.some((it) => it.exerciseId === 'ext_triceps_polea'));
+  }
+  assert.ok(res.days[3].items.some((it) => it.exerciseId === 'patada_polea'));
+  // Una sola fila de remo por día de torso (con 3–4 series al final), el resto 2–3.
+  for (const d of [res.days[0], res.days[2]]) assert.equal(d.items.filter((it) => /^remo/.test(it.exerciseId)).length, 1);
+  for (const it of all) assert.deepEqual(it.sets, /^remo/.test(it.exerciseId) ? [2, 4] : [2, 3], it.sourceName);
+  // Series por semana: 2 en las semanas 1–2 y 3 (o 3–4 en el remo) en las 3–4.
+  const row = res.days[0].items.find((it) => it.exerciseId === 'remo_maquina_neutro');
+  assert.deepEqual(row.setsByWeek, { 1: [2, 2], 2: [2, 2], 3: [3, 4], 4: [3, 4] });
+  const overhead = ['press_militar_mancuernas', 'press_hombro_maquina', 'jalon_supino', 'jalon_prono', 'dominadas_asistidas',
+    'elev_lateral_mancuernas', 'elev_lateral_polea', 'elev_frontal_pajaros', 'face_pull', 'ext_triceps_overhead', 'aperturas_polea', 'pec_deck'];
+  for (const it of all) assert.ok(!overhead.includes(it.exerciseId), `${it.exerciseId} eleva el brazo`);
 });

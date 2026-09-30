@@ -124,7 +124,8 @@ export function suggest({ history, range, rir = [1, 2], inc = 2.5, today, loadle
       reps: [lo, hi],
       text: `Antes hacías ${last.range[0]}–${last.range[1]} reps y ahora ${lo}–${hi}: calculado a partir de tu ${fmt(b.kg)} kg × ${b.reps}. Si la primera serie es muy fácil o muy dura, ajusta.`,
     };
-  } else if (minReps >= hi || (minReps >= lo && minRir !== null && minRir >= 3)) {
+  } else if (minReps >= hi || (minReps >= lo && minRir !== null && minRir > rir[1])) {
+    // "Demasiado fácil" = más reserva que el máximo del objetivo (RIR 1–2 → 3 o más; RIR 2–3 → 4 o más).
     const kg = nextKnownWeight(history, top, inc);
     res = {
       kind: 'up',

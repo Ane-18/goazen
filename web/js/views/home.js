@@ -13,7 +13,7 @@ export function render() {
   const daysLeft = block.startDate ? Math.round((Date.parse(block.startDate) - Date.parse(t)) / DAY_MS) : 0;
 
   let html = `<div class="eyebrow">${esc(fmtDate(t, { weekday: 'long', day: 'numeric', month: 'long' }))}</div>
-    <h1>Hola, Ane</h1>`;
+    <h1>Hola${store.profile().name ? `, ${esc(store.profile().name)}` : ''}</h1>`;
 
   if (active) {
     const day = store.blockById(active.blockId)?.days.find((d) => d.id === active.dayId);

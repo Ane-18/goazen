@@ -2,6 +2,7 @@
 import { EXERCISES } from './data/exercises.js';
 import { BLOCK_1_2, BLOCK_3 } from './data/blocks.js';
 import { HISTORY } from './data/history.js';
+import { PLAN_BLOQUE1 } from './data/plan-bloque1.js';
 
 const KEY = 'goazen:v1';
 const VERSION = 1;
@@ -13,28 +14,48 @@ export function today() {
 
 export const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 
-function initialState() {
+// Perfiles: cada móvil guarda uno.
+// ane: su historial de las semanas 1–8 y el Bloque 3 · nuevo: empieza de cero con el Bloque 1 (plan en máquinas).
+export const PROFILES = {
+  ane: {
+    name: 'Ane',
+    settings: { stepsGoal: 10000, cardioSessionsGoal: 4, cardioMinutesGoal: 20 },
+    blocks: () => [structuredClone(BLOCK_1_2), structuredClone(BLOCK_3)],
+    activeBlockId: BLOCK_3.id,
+    sessions: () => structuredClone(HISTORY),
+  },
+  nuevo: {
+    name: '',
+    settings: { stepsGoal: 8000, cardioSessionsGoal: 4, cardioMinutesGoal: 25 },
+    blocks: () => [structuredClone(PLAN_BLOQUE1)],
+    activeBlockId: PLAN_BLOQUE1.id,
+    sessions: () => [],
+  },
+};
+
+export function initialState(kind = 'ane', name = PROFILES[kind].name) {
+  const p = PROFILES[kind];
   return {
     version: VERSION,
     createdAt: new Date().toISOString(),
+    profile: { kind, name },
     settings: {
       restCompound: 150,
       restIsolation: 90,
-      stepsGoal: 10000,
-      cardioSessionsGoal: 4,
-      cardioMinutesGoal: 20,
+      ...p.settings,
     },
     customExercises: [],
     exerciseOverrides: {}, // { id: { inc } }
-    blocks: [structuredClone(BLOCK_1_2), structuredClone(BLOCK_3)],
-    activeBlockId: BLOCK_3.id,
-    sessions: structuredClone(HISTORY),
+    blocks: p.blocks(),
+    activeBlockId: p.activeBlockId,
+    sessions: p.sessions(),
     activeSessionId: null,
     bodyweight: [],
     steps: [], // { date, steps, cardioMin }
   };
 }
 
+// null = móvil sin datos: la app pregunta quién la va a usar (ver views/welcome.js).
 let state = load();
 const listeners = new Set();
 
@@ -45,12 +66,14 @@ function load() {
   } catch (e) {
     console.warn('No se pudo leer el almacenamiento', e);
   }
-  return initialState();
+  return null;
 }
 
-function migrate(s) {
-  const base = initialState();
-  const out = { ...base, ...s, settings: { ...base.settings, ...s.settings } };
+export function migrate(s) {
+  // Los datos guardados antes de que existieran los perfiles son de Ane.
+  const profile = s.profile ?? { kind: 'ane', name: 'Ane' };
+  const base = initialState(PROFILES[profile.kind] ? profile.kind : 'ane', profile.name);
+  const out = { ...base, ...s, profile, settings: { ...base.settings, ...s.settings } };
   if (out.settings.cardioSessionsGoal === 2) out.settings.cardioSessionsGoal = 4; // objetivo actualizado
   // Bloque 3 actualizado (nuevo orden de días, fecha de inicio…): se sustituye mientras no se haya empezado.
   const i3 = out.blocks.findIndex((b) => b.id === BLOCK_3.id);
@@ -93,8 +116,19 @@ export function replaceAll(next) {
   for (const l of listeners) l(state);
 }
 
+// Primer uso en este móvil: crea el perfil elegido.
+export function createProfile(kind, name) {
+  state = initialState(kind, name);
+  save();
+  for (const l of listeners) l(state);
+}
+
+export const needsProfile = () => state === null;
+export const profile = () => state?.profile ?? { kind: 'ane', name: 'Ane' };
+
+// Vuelve al estado inicial del mismo perfil.
 export function resetAll() {
-  state = initialState();
+  state = initialState(profile().kind, profile().name);
   save();
   for (const l of listeners) l(state);
 }

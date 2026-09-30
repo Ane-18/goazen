@@ -16,6 +16,8 @@ export const MUSCLES = {
   gluteo: 'Glúteo',
   isquios: 'Isquiotibiales',
   abdomen: 'Abdomen',
+  aductores: 'Aductores',
+  gemelo: 'Gemelo',
 };
 
 const ex = (id, name, equip, p, s = [], extra = {}) => ({
@@ -69,6 +71,9 @@ export const EXERCISES = [
   ex('ext_triceps_overhead', 'Extensión de tríceps por encima de la cabeza en polea', 'polea', ['triceps'], [], {
     cue: 'Posición de estiramiento del tríceps; útil como variante.',
   }),
+  ex('patada_triceps', 'Patada de tríceps con mancuerna', 'mancuerna', ['triceps'], [], {
+    cue: 'Codo pegado al costado y fijo; el brazo no se levanta.',
+  }),
   ex('press_frances', 'Press francés con mancuerna', 'mancuerna', ['triceps'], []),
   ex('fondos_maquina', 'Fondos en máquina o press cerrado', 'maquina', ['triceps'], ['pecho'], { compound: true }),
 
@@ -89,9 +94,15 @@ export const EXERCISES = [
   ex('jalon_prono', 'Jalón al pecho (agarre prono ancho)', 'polea', ['espalda'], ['biceps'], {
     compound: true, cue: 'Agarre prono ancho → espalda más ancha.',
   }),
+  ex('remo_maquina_neutro', 'Remo sentado en máquina (agarre neutro)', 'maquina', ['espalda'], ['biceps', 'hombro_post'], {
+    compound: true, cue: 'Pecho apoyado y codos pegados al cuerpo: brazos siempre por debajo de los hombros.',
+  }),
   ex('dominadas_asistidas', 'Dominadas asistidas en máquina', 'maquina', ['espalda'], ['biceps'], { compound: true }),
   ex('face_pull', 'Face pull en polea', 'polea', ['hombro_post'], ['espalda'], {
     cue: 'Tira hacia la cara con los codos altos.',
+  }),
+  ex('rotacion_externa_polea', 'Rotación externa en polea (codo pegado)', 'polea', ['hombro_post'], [], {
+    inc: 1, cue: 'Manguito rotador. Muy ligero, codo pegado al costado.',
   }),
   ex('pajaro_maquina', 'Pájaro en máquina (pec deck invertido)', 'maquina', ['hombro_post'], []),
   ex('curl_biceps', 'Curl de bíceps con mancuernas', 'mancuerna', ['biceps'], []),
@@ -99,6 +110,9 @@ export const EXERCISES = [
     cue: 'Agarre neutro (palmas enfrentadas).',
   }),
   ex('curl_polea', 'Curl de bíceps en polea', 'polea', ['biceps'], []),
+  ex('curl_martillo_polea', 'Curl martillo en polea con cuerda', 'polea', ['biceps'], [], {
+    cue: 'Palmas enfrentadas y codos pegados al cuerpo.',
+  }),
 
   // ── Pierna ───────────────────────────────────────────────────
   ex('hip_thrust', 'Hip thrust', 'barra', ['gluteo'], ['isquios'], {
@@ -130,16 +144,34 @@ export const EXERCISES = [
     compound: true, inc: 2, cue: 'Énfasis cuádriceps.',
   }),
   ex('patada_polea', 'Patada de glúteo en polea', 'polea', ['gluteo'], []),
+  ex('zancadas_caminando', 'Zancadas caminando con mancuernas', 'mancuerna', ['cuadriceps', 'gluteo'], [], {
+    compound: true, inc: 1, unilateral: true, cue: 'Reps = pasos por pierna. Primero sin peso.',
+  }),
   ex('bulgara', 'Sentadilla búlgara', 'mancuerna', ['cuadriceps', 'gluteo'], [], { compound: true, unilateral: true }),
   ex('ext_cuadriceps', 'Extensión de cuádriceps en máquina', 'maquina', ['cuadriceps'], []),
   ex('abductores', 'Abductores en máquina', 'maquina', ['gluteo'], []),
   ex('hip_thrust_maquina', 'Hip thrust en máquina', 'maquina', ['gluteo'], ['isquios'], { compound: true, inc: 5 }),
+  ex('prensa_piernas', 'Prensa de piernas', 'maquina', ['cuadriceps'], ['gluteo'], {
+    compound: true, inc: 5, cue: 'Pies en el centro de la plataforma, a la anchura de la cadera.',
+  }),
+  ex('patada_maquina', 'Patada de glúteo en máquina', 'maquina', ['gluteo'], []),
+  ex('aductores', 'Aductores en máquina', 'maquina', ['aductores'], []),
+  ex('hiperextensiones', 'Hiperextensiones a 45°', 'corporal', ['gluteo', 'isquios'], [], {
+    compound: true, cue: 'Bisagra de cadera con la espalda recta; sin pasar de la línea del cuerpo al subir.',
+  }),
+  ex('step_up', 'Subida al cajón (step-up)', 'corporal', ['cuadriceps', 'gluteo'], [], {
+    compound: true, unilateral: true, cue: 'Cajón bajo. Reps por pierna.',
+  }),
+  ex('elev_talones_prensa', 'Elevación de talones en prensa (gemelo)', 'maquina', ['gemelo'], [], { inc: 5 }),
   ex('sentadilla_smith', 'Sentadilla en multipower (Smith)', 'barra', ['cuadriceps'], ['gluteo'], { compound: true }),
 
   // ── Abdomen ──────────────────────────────────────────────────
   ex('crunch_maquina', 'Crunch abdominal en máquina', 'maquina', ['abdomen'], []),
   ex('abs_crunch_polea', 'Crunch en polea o plancha', 'polea', ['abdomen'], []),
   ex('abs_elevacion_piernas', 'Elevación de piernas', 'corporal', ['abdomen'], []),
+  ex('pallof_press', 'Pallof press en polea', 'polea', ['abdomen'], [], {
+    cue: 'Antirrotación: la polea intenta girarte y tú no la dejas. Reps por lado.',
+  }),
   ex('abs_rueda_plancha', 'Rueda abdominal o plancha lateral', 'corporal', ['abdomen'], []),
 ];
 

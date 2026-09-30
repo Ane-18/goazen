@@ -24,7 +24,7 @@ export function render() {
       <ul class="list" style="margin-top:10px">${d.items.map((it, i) => `
         <li><button class="btn-block" style="background:transparent;padding:0;justify-content:flex-start;text-align:left" data-item="${d.id}|${i}">
           <span class="grow"><span>${esc(ex[it.exerciseId]?.name ?? it.exerciseId)}${it.optional ? ' <span class="chip">opcional</span>' : ''}</span><br>
-          <span class="small muted num">${rangeText(it.sets)} × ${rangeText(it.reps[selectedWeek] ?? [0, 0])} reps</span>${it.note ? `<br><span class="small faint">${esc(it.note)}</span>` : ''}</span>
+          <span class="small muted num">${rangeText(it.setsByWeek?.[selectedWeek] ?? it.sets)} × ${rangeText(it.reps[selectedWeek] ?? [0, 0])} reps</span>${it.note ? `<br><span class="small faint">${esc(it.note)}</span>` : ''}</span>
           <span class="faint">${icons.edit}</span>
         </button></li>`).join('')}
       </ul>
@@ -155,7 +155,10 @@ async function editItem(dayId, i, rerender) {
   );
   if (!res || res.a === 'close') return;
   if (res.a === 'save') {
-    store.update(() => Object.assign(it, { sets: res.sets, reps: res.reps, note: res.note, optional: res.optional }));
+    store.update(() => {
+      if (String(res.sets) !== String(it.sets)) delete it.setsByWeek; // series editadas a mano: valen para todas las semanas
+      Object.assign(it, { sets: res.sets, reps: res.reps, note: res.note, optional: res.optional });
+    });
   } else if (res.a === 'up' || res.a === 'down') {
     const j = res.a === 'up' ? i - 1 : i + 1;
     store.update(() => ([day.items[i], day.items[j]] = [day.items[j], day.items[i]]));

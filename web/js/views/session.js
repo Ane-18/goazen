@@ -22,7 +22,7 @@ export function startSession(blockId, week, dayId) {
       startedAt: new Date().toISOString(),
       finished: false,
       note: '',
-      entries: day.items.map((it) => newEntry(it.exerciseId, it.reps[week] ?? Object.values(it.reps)[0], it.sets, it.optional, block)),
+      entries: day.items.map((it) => newEntry(it.exerciseId, it.reps[week] ?? Object.values(it.reps)[0], it.setsByWeek?.[week] ?? it.sets, it.optional, block)),
     });
     st.activeSessionId = id;
   });

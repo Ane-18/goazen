@@ -8,8 +8,9 @@ import * as progress from './views/progress.js';
 import * as body from './views/body.js';
 import * as more from './views/more.js';
 import * as report from './views/report.js';
+import * as welcome from './views/welcome.js';
 
-window.GOAZEN_VERSION = '1.5.0';
+window.GOAZEN_VERSION = '1.6.0';
 
 const routes = [
   { re: /^#?\/?$/, tab: 'home', render: home.render, mount: home.mount },
@@ -47,6 +48,14 @@ function route() {
 }
 
 function render({ keepScroll = false } = {}) {
+  // Móvil sin datos: primero elegir perfil.
+  if (store.needsProfile()) {
+    current = null;
+    main.innerHTML = welcome.render();
+    welcome.mount(main, () => render());
+    nav.innerHTML = '';
+    return;
+  }
   const next = route();
   // Al cambiar de pantalla (incluido el gesto "atrás") no deben quedar diálogos abiertos.
   if (!keepScroll) document.querySelectorAll('dialog[open]').forEach((d) => d.close());

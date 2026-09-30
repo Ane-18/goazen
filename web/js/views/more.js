@@ -72,7 +72,7 @@ export function mount(root, rerender) {
     try { await importBackup(f); toast('Copia restaurada'); rerender(); } catch (err) { toast(err.message); }
   };
   root.querySelector('[data-a=reset]').onclick = async () => {
-    if (!(await confirmDialog('¿Borrar todos tus registros? Se vuelve al estado inicial (Bloque 3 + historial del Excel). Descarga antes una copia si la quieres.', { ok: 'Borrar todo', danger: true }))) return;
+    if (!(await confirmDialog('¿Borrar todos tus registros? Se vuelve al estado inicial de tu plan. Descarga antes una copia si la quieres.', { ok: 'Borrar todo', danger: true }))) return;
     store.resetAll();
     toast('Datos reiniciados');
     location.hash = '#/';
@@ -90,7 +90,7 @@ export function renderScience() {
     <p>La app usa <strong>doble progresión</strong>: con el mismo peso intentas sumar repeticiones hasta el máximo del rango; cuando lo consigues en todas las series, sube el peso y vuelves al mínimo. Progresar por carga o por repeticiones da una hipertrofia similar (Plotkin et al. 2022). El incremento se ajusta a lo que permite tu gimnasio, sin porcentajes imposibles como 4,1 kg.</p>`)}
 
   ${sec('2. RIR: cuánto te queda en el tanque', `
-    <p>RIR = repeticiones en reserva. Acabar las series a 0–3 RIR produce una hipertrofia similar a llegar al fallo, con menos fatiga (Refalo et al. 2023). La app usa RIR 1–2 como objetivo. Si anotas RIR 3 o más, entiende que el peso es ligero y te propone subir.</p>
+    <p>RIR = repeticiones en reserva. Acabar las series a 0–3 RIR produce una hipertrofia similar a llegar al fallo, con menos fatiga (Refalo et al. 2023). Tu plan usa RIR ${store.activeBlock().rir?.[0] ?? 1}–${store.activeBlock().rir?.[1] ?? 2} como objetivo. Si anotas más reserva que eso, la app entiende que el peso es ligero y te propone subir.</p>
     <p class="small muted">Escala RIR: Zourdos et al. 2016; Helms et al. 2016.</p>`)}
 
   ${sec('3. Volumen: series por músculo y semana', `
@@ -99,7 +99,7 @@ export function renderScience() {
 
   ${sec('4. Rangos de repeticiones', `
     <p>Entre ~6 y ~30 repeticiones se gana músculo de forma similar si las series se acercan al fallo; los rangos bajos ganan más fuerza (Schoenfeld et al. 2017, cargas altas vs. bajas).</p>
-    <p>Tu Bloque 3 alterna 6–8 y 10–12: es razonable y ayuda a la fuerza. Periodizar mejora algo la fuerza, pero <strong>no la hipertrofia</strong> frente a no periodizar (Moesgaard et al. 2022). Así que la ventaja es real, pero pequeña: lo importante sigue siendo progresar y acumular series.</p>`)}
+    <p>${store.profile().kind === 'ane' ? 'Tu Bloque 3 alterna 6–8 y 10–12' : 'Tu plan pasa de 12–15 a 10–12 repeticiones'}: es razonable y ayuda a la fuerza. Periodizar mejora algo la fuerza, pero <strong>no la hipertrofia</strong> frente a no periodizar (Moesgaard et al. 2022). Así que la ventaja es real, pero pequeña: lo importante sigue siendo progresar y acumular series.</p>`)}
 
   ${sec('5. Descansos', `
     <p>Descansar más de 1 minuto mejora ligeramente la hipertrofia, sobre todo en ejercicios compuestos (Schoenfeld et al. 2016; Singer et al. 2024). Por defecto la app usa 2:30 en compuestos y 1:30 en aislamiento; puedes cambiarlo.</p>`)}

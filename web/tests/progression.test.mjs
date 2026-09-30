@@ -49,6 +49,15 @@ test('RIR ≥ 3 dentro del rango → demasiado fácil, sube', () => {
   assert.equal(s.kg, 5);
 });
 
+test('con objetivo RIR 2–3, dejar 3 en reserva es lo que toca: no sube, suma reps', () => {
+  const hist = [h('2026-10-19', [12, 15], [[20, 12, 3], [20, 12, 3]])];
+  const ok = suggest({ history: hist, range: [12, 15], rir: [2, 3], inc: 2.5, today: '2026-10-26' });
+  assert.equal(ok.kind, 'reps');
+  assert.equal(ok.kg, 20);
+  const easy = suggest({ history: [h('2026-10-19', [12, 15], [[20, 12, 4], [20, 12, 5]])], range: [12, 15], rir: [2, 3], inc: 2.5, today: '2026-10-26' });
+  assert.equal(easy.kind, 'up');
+});
+
 test('por debajo del rango una vez → repite; dos veces → baja', () => {
   const once = suggest({ history: [h('2026-09-20', [8, 10], [[45, 6, 0]])], range: [8, 10], inc: 2.5, today: '2026-09-23' });
   assert.equal(once.kind, 'hold');
