@@ -343,3 +343,40 @@ details[open] > summary::before { content: '▾ '; }
 .act-row.today > span:first-child { color: var(--primary-ink); font-weight: 650; }
 .act-row .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--surface-2); }
 .act-row .dot.on { background: var(--good); }
+
+/* ── Calendario ──────────────────────────────────────── */
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal-wd { font-size: 0.72rem; color: var(--muted); font-weight: 600; padding-bottom: 2px; }
+.cal-day {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid; place-items: center;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-2);
+  text-decoration: none;
+}
+.cal-day.gym { background: var(--primary); color: var(--on-primary); font-weight: 650; }
+.cal-day.gym.approx { background: color-mix(in srgb, var(--primary) 45%, var(--surface-2)); color: var(--text); }
+.cal-day.planned { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--primary) 55%, transparent); }
+.cal-day.today { outline: 2px solid var(--text); outline-offset: -2px; color: var(--text); font-weight: 650; }
+.cal-day .cdot {
+  position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 6px; height: 6px; border-radius: 50%; background: var(--good);
+}
+.cal-day.gym .cdot { background: var(--on-primary); }
+.cal-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.cal-legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 4px; vertical-align: -1px; margin-right: 5px; }
+.cal-legend .sw.gym { background: var(--primary); }
+.cal-legend .sw.cdot { width: 8px; height: 8px; border-radius: 50%; vertical-align: 1px; background: var(--good); }
+.cal-legend .sw.planned { box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--primary) 55%, transparent); }
+
+/* ── Resumen de bloque ───────────────────────────────── */
+.hero-num { font-size: 2.6rem; font-weight: 750; line-height: 1.05; letter-spacing: -0.02em; color: var(--text); }
+.rbars { margin: 0; padding: 0; list-style: none; }
+.rbars > li + li { margin-top: 14px; }
+.rbar-track { height: 8px; margin: 5px 0 3px; }
+.rbar { height: 8px; border-radius: 0 4px 4px 0; background: var(--primary); }
+.rbar.neg { background: var(--bad); }
+a.rlink { color: inherit; text-decoration: none; }

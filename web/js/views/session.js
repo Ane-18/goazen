@@ -357,6 +357,8 @@ async function finish(session) {
     if (st.activeSessionId === session.id) st.activeSessionId = null;
   });
   stopRest();
+  const block = store.blockById(session.blockId);
+  const blockDone = block && !block.archived && !store.nextSlot(block);
   const mins = Math.round((Date.parse(session.finishedAt) - Date.parse(session.startedAt)) / 60000);
   const sets = session.entries.reduce((n, e) => n + e.sets.length, 0);
   await modal(
@@ -366,8 +368,9 @@ async function finish(session) {
        <div class="stat"><span class="v">${mins}</span><span class="l">minutos</span></div>
      </div>
      ${prs.length ? `<div class="note good"><strong>¡Nuevo récord!</strong><br>${prs.map(esc).join('<br>')}</div>` : ''}
-     <button class="btn-primary btn-block" data-ok>Volver al inicio</button>`,
+     ${blockDone ? `<div class="note primary"><strong>¡Has terminado ${esc(block.name)}!</strong><br>Mira cuánto has avanzado.</div>` : ''}
+     <button class="btn-primary btn-block" data-ok>${blockDone ? 'Ver el resumen del bloque' : 'Volver al inicio'}</button>`,
     (dlg, close) => (dlg.querySelector('[data-ok]').onclick = () => close()),
   );
-  location.hash = '#/';
+  location.hash = blockDone ? `#/resumen/${block.id}` : '#/';
 }

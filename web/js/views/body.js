@@ -2,6 +2,7 @@ import * as store from '../store.js';
 import { esc, fmtDate, confirmDialog } from '../ui.js';
 import { weightTrend, fmt, round1, DAY_MS } from '../progression.js';
 import { lineChart, hydrateCharts } from '../charts.js';
+import { calendarCard, mountCalendar } from './calendar.js';
 
 const isoOf = (ms) => new Date(ms).toISOString().slice(0, 10);
 
@@ -40,6 +41,7 @@ export function render() {
   const waistOf = (date) => st.bodyweight.find((b) => b.date === date)?.waist;
 
   return `<h1>Actividad</h1>
+    ${calendarCard()}
     <div class="card stack">
       <h2 style="margin:0">Esta semana</h2>
       <div class="stats">
@@ -72,6 +74,7 @@ export function render() {
 
 export function mount(root, rerender) {
   hydrateCharts(root);
+  mountCalendar(root, rerender);
   const t = store.today();
 
   root.querySelectorAll('[data-date]').forEach((el) => (el.onchange = () => {

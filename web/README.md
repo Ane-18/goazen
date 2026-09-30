@@ -6,7 +6,8 @@ Cuaderno de gimnasio instalable en el móvil (PWA). Sustituye a la app Flutter d
 - **Registro por serie**: peso, reps y RIR, con tu último registro a la vista.
 - **Peso sugerido** por doble progresión + RIR, respetando los incrementos reales de tu gimnasio.
 - **Avisos**: ejercicios estancados 3 sesiones y músculos con menos de 10 series semanales.
-- **Actividad**: pasos y minutos de cardio de cada día de la semana. Peso y cintura, opcionales.
+- **Actividad**: calendario del mes (gimnasio, cardio y días que tocan), pasos y minutos de cardio de cada día. Peso y cintura, opcionales.
+- **Resumen de bloque**: al terminar un bloque, cuánto ha subido la fuerza (total, semana a semana, por ejercicio y por músculo) y qué significa. También en *Progreso → Resumen de cada bloque*.
 - **Bloques nuevos**: *Plan → Importar bloque desde Excel* lee un Excel con el mismo formato (hojas "Dia 1", "Dia 2"…, columna "Series x Reps").
 - **Datos locales**: todo se guarda en el móvil. Exporta a Excel o a una copia JSON desde *Más*.
 
@@ -29,6 +30,7 @@ npm test       # pruebas de la lógica de progresión (node --test)
 ```
 
 - `js/progression.js`: lógica pura (sugerencias, estancamiento, volumen, tendencia de peso). Probada en `tests/`.
+- `js/report.js`: lógica pura del resumen de bloque y sus conclusiones. Probada en `tests/`.
 - `js/data/blocks.js`: el Bloque 3 y los cambios de los bloques 1–2.
 - `js/data/history.js`: semanas 1–8 importadas del Excel con `node tools/import-excel-history.cjs <excel>`.
 - `sw.js`: caché sin conexión. **Sube `VERSION`** cada vez que publiques cambios.

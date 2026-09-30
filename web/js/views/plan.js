@@ -1,5 +1,5 @@
 import * as store from '../store.js';
-import { esc, muscleName, rangeText, icons, modal, confirmDialog, toast } from '../ui.js';
+import { esc, dayLabel, muscleName, rangeText, icons, modal, confirmDialog, toast } from '../ui.js';
 import { blockVolume, pickExercise } from '../coach.js';
 import { volumeStatus, fmt } from '../progression.js';
 import { MUSCLES } from '../data/exercises.js';
@@ -19,7 +19,7 @@ export function render() {
       `<button class="chip ${w === selectedWeek ? 'on' : ''}" data-week="${w}" role="tab" aria-selected="${w === selectedWeek}">Semana ${w}</button>`).join('')}</div>`;
 
   for (const d of block.days) {
-    html += `<div class="card"><div class="row spread"><div><h2 style="margin:0">${esc(d.name)}</h2><div class="small muted">${esc(d.subtitle)}</div></div></div>
+    html += `<div class="card"><div class="row spread"><div><h2 style="margin:0">${esc(dayLabel(d))}</h2><div class="small muted">${esc(d.subtitle)}</div></div></div>
       <ul class="list" style="margin-top:10px">${d.items.map((it, i) => `
         <li><button class="btn-block" style="background:transparent;padding:0;justify-content:flex-start;text-align:left" data-item="${d.id}|${i}">
           <span class="grow"><span>${esc(ex[it.exerciseId]?.name ?? it.exerciseId)}${it.optional ? ' <span class="chip">opcional</span>' : ''}</span><br>

@@ -6,6 +6,10 @@ export const esc = (s) =>
 
 export const muscleName = (m) => MUSCLES[m] ?? m;
 
+// weekday del bloque (1 = lunes … 7 = domingo) → nombre.
+export const WEEKDAY_NAMES = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+export const dayLabel = (d) => (d.weekday ? `${d.name} · ${WEEKDAY_NAMES[d.weekday]}` : d.name);
+
 export function fmtDate(iso, opts = { weekday: 'short', day: 'numeric', month: 'short' }) {
   if (!iso) return '';
   const [y, m, d] = iso.split('-').map(Number);

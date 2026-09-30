@@ -52,9 +52,11 @@ function migrate(s) {
   const base = initialState();
   const out = { ...base, ...s, settings: { ...base.settings, ...s.settings } };
   if (out.settings.cardioSessionsGoal === 2) out.settings.cardioSessionsGoal = 4; // objetivo actualizado
-  // El Bloque 3 se retrasó al 5 de octubre (semana del 28 sep de recuperación).
-  const b3 = out.blocks.find((b) => b.id === 'bloque3');
-  if (b3?.startDate === '2026-09-21' && !out.sessions.some((x) => x.blockId === 'bloque3')) b3.startDate = '2026-10-05';
+  // Bloque 3 actualizado (nuevo orden de días, fecha de inicio…): se sustituye mientras no se haya empezado.
+  const i3 = out.blocks.findIndex((b) => b.id === BLOCK_3.id);
+  if (i3 !== -1 && (out.blocks[i3].rev ?? 1) < BLOCK_3.rev && !out.sessions.some((x) => x.blockId === BLOCK_3.id)) {
+    out.blocks[i3] = structuredClone(BLOCK_3);
+  }
   return out;
 }
 

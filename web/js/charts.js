@@ -23,7 +23,8 @@ function niceTicks(min, max, count = 4) {
 
 const shortDate = (ms) => new Date(ms).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
 
-export function lineChart(series, { unit = 'kg', ariaLabel = '' } = {}) {
+// xFormat: etiqueta del eje X (por defecto x es una fecha en ms).
+export function lineChart(series, { unit = 'kg', ariaLabel = '', xFormat = shortDate } = {}) {
   const all = series.flatMap((s) => s.points);
   if (all.length === 0) return '<p class="muted small">Sin datos todavía.</p>';
   const xs = all.map((p) => p.x);
@@ -31,6 +32,7 @@ export function lineChart(series, { unit = 'kg', ariaLabel = '' } = {}) {
   let x0 = Math.min(...xs);
   let x1 = Math.max(...xs);
   if (x0 === x1) { x0 -= 86400000 * 3; x1 += 86400000 * 3; }
+  const xTicksAt = xFormat === shortDate ? null : [...new Set(xs)].sort((a, b) => a - b);
   const ticks = niceTicks(Math.min(...ys), Math.max(...ys));
   const y0 = ticks[0];
   const y1 = ticks[ticks.length - 1];
@@ -42,10 +44,10 @@ export function lineChart(series, { unit = 'kg', ariaLabel = '' } = {}) {
     svg += `<line x1="${PAD.l}" x2="${W - PAD.r}" y1="${sy(t)}" y2="${sy(t)}" stroke="var(--chart-grid)" stroke-width="1"/>`;
     svg += `<text x="${PAD.l - 6}" y="${sy(t) + 4}" text-anchor="end" font-size="10" fill="var(--muted)">${fmt(t)}</text>`;
   }
-  const xTicks = [x0, (x0 + x1) / 2, x1];
+  const xTicks = xTicksAt ?? [x0, (x0 + x1) / 2, x1];
   xTicks.forEach((t, i) => {
-    const anchor = i === 0 ? 'start' : i === 2 ? 'end' : 'middle';
-    svg += `<text x="${sx(t)}" y="${H - 6}" text-anchor="${anchor}" font-size="10" fill="var(--muted)">${shortDate(t)}</text>`;
+    const anchor = i === 0 ? 'start' : i === xTicks.length - 1 ? 'end' : 'middle';
+    svg += `<text x="${sx(t)}" y="${H - 6}" text-anchor="${anchor}" font-size="10" fill="var(--muted)">${xFormat(t)}</text>`;
   });
 
   for (const s of series) {
@@ -66,7 +68,7 @@ export function lineChart(series, { unit = 'kg', ariaLabel = '' } = {}) {
   // Datos para el tooltip: la serie principal (línea) manda.
   const main = series.find((s) => s.style !== 'dots') ?? series[0];
   const hover = [...main.points].sort((a, b) => a.x - b.x).map((p) => ({
-    px: sx(p.x), py: sy(p.y), label: p.label ?? `${shortDate(p.x)} · ${fmt(p.y)} ${unit}`,
+    px: sx(p.x), py: sy(p.y), label: p.label ?? `${xFormat(p.x)} · ${fmt(p.y)} ${unit}`,
   }));
   return `<div class="chart" data-hover='${esc(JSON.stringify(hover))}'>${svg}<div class="tip hidden"></div></div>`;
 }

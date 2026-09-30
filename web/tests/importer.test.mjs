@@ -37,6 +37,9 @@ test('el Excel del Bloque 3 se importa igual que el bloque cargado a mano', () =
   assert.equal(res.days.length, 4);
   assert.deepEqual(res.warnings, []);
   for (const [i, day] of res.days.entries()) {
+    assert.equal(day.subtitle.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, ''),
+      BLOCK_3.days[i].subtitle.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, ''), `Día ${i + 1} título`);
+    assert.equal(day.weekday, BLOCK_3.days[i].weekday, `Día ${i + 1} día de la semana`);
     const expected = BLOCK_3.days[i].items.filter((it) => !it.optional);
     assert.deepEqual(day.items.map((it) => it.exerciseId), expected.map((it) => it.exerciseId), `Día ${i + 1}`);
     for (const [j, it] of day.items.entries()) {

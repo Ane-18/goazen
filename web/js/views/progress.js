@@ -21,8 +21,14 @@ export function renderList() {
     </a></li>`;
   };
 
+  const withSessions = store.get().blocks.filter((b) => store.finishedSessions().some((s) => s.blockId === b.id)).reverse();
+  const summaries = withSessions.length ? `<div class="card"><h2>Resumen de cada bloque</h2><ul class="list">${withSessions.map((b) => `<li><a class="list-link" href="#/resumen/${b.id}">
+      <span class="grow">${esc(b.name)} <span class="small muted">· semanas ${b.weeks[0]}–${b.weeks[b.weeks.length - 1]}</span></span>
+      <span class="chip ${b.archived || !store.nextSlot(b) ? 'good' : ''}">${b.archived || !store.nextSlot(b) ? 'terminado' : 'en curso'}</span></a></li>`).join('')}</ul></div>` : '';
+
   return `<h1>Progreso</h1>
     <p class="muted small">Cuánto ha subido tu fuerza en las últimas 8 semanas.</p>
+    ${summaries}
     <div class="card"><h2>${esc(block.name)}</h2><ul class="list">${inBlock.map(row).join('')}</ul></div>
     ${past.length ? `<div class="card"><h2>Ejercicios anteriores</h2><ul class="list">${past.map(row).join('')}</ul></div>` : ''}`;
 }

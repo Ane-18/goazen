@@ -1,5 +1,5 @@
 import * as store from '../store.js';
-import { esc, fmtDate, confirmDialog } from '../ui.js';
+import { esc, fmtDate, confirmDialog, WEEKDAY_NAMES } from '../ui.js';
 import { DAY_MS } from '../progression.js';
 import { startSession } from './session.js';
 
@@ -27,6 +27,7 @@ export function render() {
       <h2 style="font-size:1.4rem;margin:0">${esc(fmtDate(block.startDate, { weekday: 'long', day: 'numeric', month: 'long' }))}</h2>
       <p class="muted">Faltan ${daysLeft} ${daysLeft === 1 ? 'día' : 'días'}. Hasta entonces, descansa y recupérate: no hace falta apuntar nada.</p>
       <a class="btn btn-block" href="#/plan">Ver lo que toca</a>
+      <a class="btn btn-ghost btn-block btn-sm" href="#/actividad">Ver calendario</a>
     </div>
     <button class="btn-ghost btn-block btn-sm" data-start="${next.week}|${next.dayId}">Empezar antes</button>`;
   } else if (next) {
@@ -40,7 +41,9 @@ export function render() {
   } else {
     html += `<div class="card accent stack">
       <h2>¡${esc(block.name)} terminado! 🎉</h2>
-      <a class="btn btn-primary btn-block" href="#/plan">Crear el siguiente bloque</a>
+      <p class="muted" style="margin:0">Mira cuánto has avanzado y qué significa antes de preparar el siguiente.</p>
+      <a class="btn btn-primary btn-block" href="#/resumen/${block.id}">Ver tu resumen</a>
+      <a class="btn btn-block" href="#/plan">Crear el siguiente bloque</a>
     </div>`;
   }
 
@@ -51,7 +54,7 @@ export function render() {
         const s = store.sessionFor(block.id, week, d.id);
         const isNext = next && next.week === week && next.dayId === d.id && !active;
         return `<button class="day-pill ${s?.finished ? 'done' : ''} ${isNext ? 'next' : ''}" data-day="${week}|${d.id}">
-          <strong>${esc(d.name)}</strong><span class="small">${s?.finished ? '✓ hecho' : s ? 'a medias' : ''}</span>
+          <strong>${esc(d.name)}</strong>${d.weekday ? `<span class="small faint">${WEEKDAY_NAMES[d.weekday].slice(0, 3)}</span>` : ''}<span class="small">${s?.finished ? '✓ hecho' : s ? 'a medias' : ''}</span>
         </button>`;
       }).join('')}</div></div>`;
   }

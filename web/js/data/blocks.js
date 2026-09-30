@@ -16,19 +16,36 @@ const item = (exerciseId, sets, reps, note = '', extra = {}) => ({
 export const BLOCK_3 = {
   id: 'bloque3',
   name: 'Bloque 3',
+  rev: 2, // súbelo al cambiar el bloque: store.js lo actualiza en el móvil si aún no se ha empezado
   weeks: [9, 10, 11, 12],
-  startDate: '2026-10-05', // semana del 28 sep: recuperación, sin registrar
+  startDate: '2026-10-13',
   rir: [1, 2],
   description:
     'Semanas 9–10: rango de fuerza (6–8 reps, más peso). Semanas 11–12: rango de hipertrofia (10–12 reps). Accesorios en 12–15+.',
+  // weekday: 1 = lunes … 7 = domingo (el día de la semana que toca en el Excel).
   days: [
     {
       id: 'd1',
       name: 'Día 1',
+      weekday: 1,
+      subtitle: 'Pierna y glúteo (énfasis glúteo)',
+      items: [
+        item('hip_thrust', [4, 4], STRENGTH_THEN_HYPERTROPHY, 'Prioridad glúteo: pausa 1–2 s arriba.'),
+        item('prensa_pies_altos', [3, 3], STRENGTH_THEN_HYPERTROPHY),
+        item('rdl', [3, 3], STRENGTH_THEN_HYPERTROPHY, 'Unilateral.'),
+        item('hack', [3, 3], STRENGTH_THEN_HYPERTROPHY),
+        item('curl_femoral', [3, 3], fixed(12, 15)),
+        item('puente_banda', [3, 3], fixed(15, 20)),
+      ],
+    },
+    {
+      id: 'd2',
+      name: 'Día 2',
+      weekday: 2,
       subtitle: 'Pecho, hombro, espalda, tríceps y abdomen',
       items: [
         item('press_mancuernas', [3, 4], STRENGTH_THEN_HYPERTROPHY, 'Revisa la técnica antes de subir peso: llevas 8 semanas notando hombro y no pecho.'),
-        item('remo_barra', [3, 4], STRENGTH_THEN_HYPERTROPHY),
+        item('remo_pecho_apoyado', [3, 4], STRENGTH_THEN_HYPERTROPHY, 'Cada brazo por separado: corrige la asimetría entre lados.'),
         item('press_militar_mancuernas', [3, 3], STRENGTH_THEN_HYPERTROPHY),
         item('jalon_supino', [3, 3], STRENGTH_THEN_HYPERTROPHY),
         item('elev_lateral_polea', [3, 3], fixed(12, 15)),
@@ -37,21 +54,23 @@ export const BLOCK_3 = {
       ],
     },
     {
-      id: 'd2',
-      name: 'Día 2',
-      subtitle: 'Pierna y glúteo (énfasis glúteo)',
+      id: 'd3',
+      name: 'Día 3',
+      weekday: 3,
+      subtitle: 'Pierna y glúteo (variante)',
       items: [
-        item('hip_thrust', [4, 4], STRENGTH_THEN_HYPERTROPHY),
-        item('prensa_pies_altos', [3, 3], STRENGTH_THEN_HYPERTROPHY),
-        item('rdl', [3, 3], STRENGTH_THEN_HYPERTROPHY),
-        item('hack', [3, 3], STRENGTH_THEN_HYPERTROPHY),
+        item('zancadas', [3, 3], STRENGTH_THEN_HYPERTROPHY, 'Reps por pierna.'),
+        item('peso_muerto', [3, 4], STRENGTH_THEN_HYPERTROPHY),
+        item('goblet', [3, 3], STRENGTH_THEN_HYPERTROPHY),
+        item('patada_polea', [3, 3], fixed(12, 15)),
         item('curl_femoral', [3, 3], fixed(12, 15)),
-        item('puente_banda', [3, 3], fixed(15, 20)),
+        item('abs_rueda_plancha', [3, 3], fixed(10, 15), 'Opcional. En plancha, anota segundos en "reps".', { optional: true }),
       ],
     },
     {
-      id: 'd3',
-      name: 'Día 3',
+      id: 'd4',
+      name: 'Día 4',
+      weekday: 4,
       subtitle: 'Torso (variante de ángulos y agarres)',
       items: [
         item('press_inclinado_mancuernas', [3, 4], STRENGTH_THEN_HYPERTROPHY),
@@ -63,24 +82,12 @@ export const BLOCK_3 = {
         item('abs_elevacion_piernas', [3, 3], fixed(12, 15), 'Opcional si el tiempo aprieta.', { optional: true }),
       ],
     },
-    {
-      id: 'd4',
-      name: 'Día 4',
-      subtitle: 'Pierna y glúteo (variante)',
-      items: [
-        item('zancadas', [3, 3], STRENGTH_THEN_HYPERTROPHY, 'Reps por pierna.'),
-        item('peso_muerto', [3, 4], STRENGTH_THEN_HYPERTROPHY),
-        item('goblet', [3, 3], STRENGTH_THEN_HYPERTROPHY),
-        item('patada_polea', [3, 3], fixed(12, 15)),
-        item('curl_femoral', [3, 3], fixed(12, 15)),
-        item('abs_rueda_plancha', [3, 3], fixed(10, 15), 'Opcional. En plancha, anota segundos en "reps".', { optional: true }),
-      ],
-    },
   ],
   changes: [
     { week: 9, from: 'press_frances', to: 'ext_triceps_polea', reason: 'No te gustaba y no notabas progreso. La extensión en polea progresaba bien (llegaste a 27 kg).' },
     { week: 9, from: 'fondos_maquina', to: 'ext_triceps_cuerda', reason: '4 semanas estancada en 32 kg y no te gustaba.' },
     { week: 9, from: null, to: 'crunch_maquina', reason: 'Lo pediste tras 8 semanas casi sin abdominales.' },
+    { week: 9, from: 'remo_barra', to: 'remo_pecho_apoyado', reason: 'Sin carga lumbar (pecho apoyado) y cada brazo trabaja por separado para corregir la asimetría.' },
   ],
 };
 

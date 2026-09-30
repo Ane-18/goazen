@@ -100,6 +100,9 @@ export function parseSetsReps(text, weeks) {
 
 const cap = (s) => String(s ?? '').trim().replace(/^\w/, (c) => c.toUpperCase());
 
+// "DIA 1 - LUNES" → weekday 1 (lunes) … 7 (domingo).
+const WEEKDAYS = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+
 /**
  * @param {Object<string, any[][]>} sheets  nombre de hoja → filas (arrays)
  * @param {Object} exercises  catálogo { id: ejercicio }
@@ -159,7 +162,10 @@ export function parseBlock(sheets, exercises, defaultWeeks = [1, 2, 3, 4]) {
         sourceName: name,
       });
     }
-    days.push({ id: 'd' + m[1], name: `Día ${m[1]}`, subtitle: cap(title[1] ?? ''), items });
+    const day = { id: 'd' + m[1], name: `Día ${m[1]}`, subtitle: cap(title[1] ?? ''), items };
+    const wd = WEEKDAYS.findIndex((d) => norm(title[0]).includes(d));
+    if (wd !== -1) day.weekday = wd + 1;
+    days.push(day);
   }
 
   if (!days.length) warnings.push('No encuentro hojas llamadas "Dia 1", "Dia 2"…');

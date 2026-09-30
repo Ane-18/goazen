@@ -7,8 +7,9 @@ import * as plan from './views/plan.js';
 import * as progress from './views/progress.js';
 import * as body from './views/body.js';
 import * as more from './views/more.js';
+import * as report from './views/report.js';
 
-window.GOAZEN_VERSION = '1.2.0';
+window.GOAZEN_VERSION = '1.4.0';
 
 const routes = [
   { re: /^#?\/?$/, tab: 'home', render: home.render, mount: home.mount },
@@ -16,6 +17,7 @@ const routes = [
   { re: /^#\/plan$/, tab: 'plan', render: plan.render, mount: plan.mount },
   { re: /^#\/progreso$/, tab: 'progreso', render: progress.renderList },
   { re: /^#\/ejercicio\/([\w-]+)$/, keys: ['id'], tab: 'progreso', render: progress.renderDetail, mount: progress.mountDetail },
+  { re: /^#\/resumen\/([\w-]+)$/, keys: ['id'], tab: 'progreso', render: report.render, mount: report.mount },
   { re: /^#\/(?:actividad|cuerpo)$/, tab: 'actividad', render: body.render, mount: body.mount },
   { re: /^#\/mas$/, tab: 'mas', render: more.render, mount: more.mount },
   { re: /^#\/ciencia$/, tab: 'mas', render: more.renderScience },

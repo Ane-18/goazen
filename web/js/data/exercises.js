@@ -80,8 +80,8 @@ export const EXERCISES = [
     compound: true, inc: 2, cue: 'Agarre neutro.',
   }),
   ex('remo_polea_baja', 'Remo en polea baja', 'polea', ['espalda'], ['biceps', 'hombro_post'], { compound: true }),
-  ex('remo_pecho_apoyado', 'Remo con pecho apoyado en máquina', 'maquina', ['espalda'], ['biceps', 'hombro_post'], {
-    compound: true, cue: 'El pecho apoyado quita carga a la zona lumbar.',
+  ex('remo_pecho_apoyado', 'Remo unilateral en máquina (pecho apoyado)', 'maquina', ['espalda'], ['biceps', 'hombro_post'], {
+    compound: true, unilateral: true, cue: 'El pecho apoyado quita carga a la zona lumbar; cada brazo por separado corrige asimetrías.',
   }),
   ex('jalon_supino', 'Jalón al pecho (agarre supino estrecho)', 'polea', ['espalda'], ['biceps'], {
     compound: true, cue: 'Agarre supino estrecho → más bíceps.',
