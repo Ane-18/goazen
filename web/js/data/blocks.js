@@ -16,9 +16,9 @@ const item = (exerciseId, sets, reps, note = '', extra = {}) => ({
 export const BLOCK_3 = {
   id: 'bloque3',
   name: 'Bloque 3',
-  rev: 2, // súbelo al cambiar el bloque: store.js lo actualiza en el móvil si aún no se ha empezado
+  rev: 3, // súbelo al cambiar el bloque: store.js lo actualiza en el móvil si aún no se ha empezado
   weeks: [9, 10, 11, 12],
-  startDate: '2026-10-13',
+  startDate: '2026-10-19',
   rir: [1, 2],
   description:
     'Semanas 9–10: rango de fuerza (6–8 reps, más peso). Semanas 11–12: rango de hipertrofia (10–12 reps). Accesorios en 12–15+.',
